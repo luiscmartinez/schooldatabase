@@ -10,8 +10,8 @@ import java.util.Scanner;
 import schooldatabase.model.Student;
 
 public class StudentFileManager {
-    private String filename;
-    private ArrayList<Student> students = new ArrayList<>();
+    String filename;
+    ArrayList<Student> students = new ArrayList<>();
 
     public StudentFileManager(String filename) {
         this.filename = filename;
