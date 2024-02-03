@@ -15,6 +15,7 @@ public class StudentFormGenerator {
     private TextField firstNameField;
     private TextField lastNameField;
     private TextField addressField;
+    private TextField cityField;
     private TextField zipcodeField;
     private ComboBox<String> stateComboBox;
     private Button actionButton;
@@ -24,6 +25,7 @@ public class StudentFormGenerator {
         firstNameField = new TextField();
         lastNameField = new TextField();
         addressField = new TextField();
+        cityField = new TextField();
         zipcodeField = new TextField();
         stateComboBox = new ComboBox<>(FXCollections.observableArrayList(
                 "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA",
@@ -45,22 +47,26 @@ public class StudentFormGenerator {
         formPane.add(lastNameField, 1, 1);
         formPane.add(new Label("Address:"), 0, 2);
         formPane.add(addressField, 1, 2);
-        formPane.add(new Label("Zipcode:"), 0, 3);
-        formPane.add(zipcodeField, 1, 3);
-        formPane.add(new Label("State:"), 0, 4);
-        formPane.add(stateComboBox, 1, 4);
+        formPane.add(new Label("City:"), 0, 3);
+        formPane.add(cityField, 1, 3);
+        formPane.add(new Label("Zipcode:"), 0, 4);
+        formPane.add(zipcodeField, 1, 4);
+        formPane.add(new Label("State:"), 0, 5);
+        formPane.add(stateComboBox, 1, 5);
 
         if (!actionButton.getText().isEmpty()) {
-            formPane.add(actionButton, 1, 5);
+            formPane.add(actionButton, 1, 6);
         }
 
         return formPane;
     }
 
-    public void prepopulateForm(String firstName, String lastName, String address, String zipcode, String state) {
+    public void prepopulateForm(String firstName, String lastName, String address, String city, String zipcode,
+            String state) {
         firstNameField.setText(firstName);
         lastNameField.setText(lastName);
         addressField.setText(address);
+        cityField.setText(city);
         zipcodeField.setText(zipcode);
         stateComboBox.setValue(state);
     }
@@ -87,6 +93,10 @@ public class StudentFormGenerator {
 
     public String getAddress() {
         return addressField.getText();
+    }
+
+    public String getCity() {
+        return cityField.getText();
     }
 
     public String getZipcode() {
