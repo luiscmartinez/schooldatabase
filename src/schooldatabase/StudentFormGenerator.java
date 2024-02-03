@@ -106,4 +106,14 @@ public class StudentFormGenerator {
     public String getState() {
         return stateComboBox.getValue();
     }
+
+    public void clearForm() {
+        // Clear all text fields and reset the combo box
+        firstNameField.clear();
+        lastNameField.clear();
+        addressField.clear();
+        cityField.clear();
+        zipcodeField.clear();
+        stateComboBox.getSelectionModel().clearSelection();
+    }
 }
