@@ -75,4 +75,25 @@ public class StudentFormGenerator {
         actionButton.setText(label);
         actionButton.setOnAction(action::accept);
     }
+
+    // Getter methods
+    public String getFirstName() {
+        return firstNameField.getText();
+    }
+
+    public String getLastName() {
+        return lastNameField.getText();
+    }
+
+    public String getAddress() {
+        return addressField.getText();
+    }
+
+    public String getZipcode() {
+        return zipcodeField.getText();
+    }
+
+    public String getState() {
+        return stateComboBox.getValue();
+    }
 }
