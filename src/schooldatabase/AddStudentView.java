@@ -1,54 +1,26 @@
 package schooldatabase;
 
-import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
-import java.util.Arrays;
+import javafx.scene.layout.GridPane;
 
 public class AddStudentView {
-    private Stage primaryStage;
     private StudentFileManager studentFileManager;
+    private GridPane formPane;
 
-    public AddStudentView(Stage primaryStage, StudentFileManager studentFileManager) {
-        this.primaryStage = primaryStage;
+    public AddStudentView(StudentFileManager studentFileManager) {
         this.studentFileManager = studentFileManager;
-        initializeView();
+        this.formPane = createFormPane();
     }
 
-    private void initializeView() {
-        primaryStage.setTitle("School Database");
-
-        BorderPane root = new BorderPane();
-        Scene scene = new Scene(root, 400, 300);
-        primaryStage.setScene(scene);
-
-        // MenuBar setup
-        MenuBar menuBar = new MenuBar();
-        root.setTop(menuBar);
-
-        // Student Menu
-        Menu studentMenu = MenuFactory.createMenu("Student");
-        MenuItem addStudent = MenuFactory.createMenuItem("Add Student", this::showFormDialog);
-        MenuItem editStudent = MenuFactory.createMenuItem("Edit Student", this::showFormDialog);
-        MenuItem exitItem = MenuFactory.createMenuItem("Exit", primaryStage::close);
-        MenuFactory.addItemsToMenu(studentMenu, Arrays.asList(addStudent, editStudent, exitItem));
-        menuBar.getMenus().add(studentMenu);
-
-        // Form setup
+    private GridPane createFormPane() {
+        // Initialize and configure the StudentFormGenerator
         StudentFormGenerator newStudentForm = new StudentFormGenerator();
         StudentActionHandler actionHandler = new StudentActionHandler(newStudentForm, studentFileManager);
         newStudentForm.configureActionButton("Add Student", event -> actionHandler.handleAddStudent());
 
-        // Add form to the scene
-        root.setCenter(newStudentForm.createForm());
-
-        primaryStage.show();
+        return newStudentForm.createForm();
     }
 
-    private void showFormDialog() {
-        // Implementation for showing the form dialog
+    public GridPane getFormPane() {
+        return this.formPane;
     }
 }
