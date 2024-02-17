@@ -1,0 +1,107 @@
+package schooldatabase;
+
+import java.util.Scanner;
+
+import schooldatabase.model.Course;
+
+import java.io.*;
+import java.util.ArrayList;
+
+class CourseFileManager {
+    ArrayList<Course> courses = new ArrayList<Course>(); // arrayList<Courset>
+    String filename;
+
+    // Constructor
+    CourseFileManager(String filename) {
+        try {
+            this.filename = filename;
+            File file = new File(filename);
+            Scanner FileScanner = new Scanner(file); // Create File scanner
+            // Read File line by line
+            if (file.exists()) {
+                while (FileScanner.hasNext()) {
+                    String line = FileScanner.nextLine();// read next line
+                    String[] c = line.split(",");// Split line into a string array
+                    // Asign the element of array to variables
+                    int courseId = Integer.parseInt(c[0]);
+                    String courseName = c[1];
+                    String courseDescription = c[2];
+                    // Create course object using variables
+                    Course course = new Course(courseId, courseName, courseDescription);
+                    courses.add(course);// Add course Object to array list
+                }
+                FileScanner.close();
+            }
+        } catch (IOException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    Course GetCourse(int cid) throws EmptyFieldException, IOException {
+        // try{
+        if (cid == 0) {
+            throw new EmptyFieldException("Invalid Course ID");
+        } else {
+            for (int i = 0; i < courses.size(); i++) {
+                Course current = courses.get(i);
+                int ID = current.getCourseID();
+                if (ID == cid)
+                    return current;
+            }
+        }
+        return null;
+
+    }
+
+    boolean AddCourse(int CID, String courseName, String courseDescrip) throws EmptyFieldException, IOException {
+        // If course does not exist collect info, create new course object and add to
+        // arraylist and return true
+        if (GetCourse(CID) == null) {// Call getCourse method to find if course exis
+            if (courseName.equals("") || courseDescrip.equals("")) {
+                throw new EmptyFieldException("Course ID Field is Blank");
+            } else {
+                Course cour = new Course(CID, courseName, courseDescrip);
+                courses.add(cour);
+
+                // Append the new course object to the file
+                FileWriter fwriter = new FileWriter(filename, true);
+                PrintWriter outputFile = new PrintWriter(fwriter);
+                outputFile.println(cour.getCourseID() + "," + cour.getName() + "," + cour.getDescription());
+                outputFile.close();
+
+                System.out.println("Course has been added");// Confirmation Statement
+                return true;
+            }
+        } else {// If the course already exist then display an error message and return false
+            System.out.println("Course Already Exists");
+            return false;
+        }
+    }
+
+    boolean updateCourse(int cid, String courName, String courseDescription) throws IOException, EmptyFieldException {
+        // Check if course exists, if it does then update the course object and return
+        // true
+        if (GetCourse(cid) != null) {
+            Course cour = GetCourse(cid);
+            int index = courses.indexOf(cour);// Find the location of the course in the arraylist
+            cour.setID(cid);
+            cour.setName(courName);
+            cour.setDescription(courseDescription);
+            courses.set(index, cour);// replace cour
+            // print every course in Arraylist in a wiped fi;e
+            FileWriter fwriter = new FileWriter(filename);
+            PrintWriter outputFile = new PrintWriter(fwriter);
+            for (int i = 0; i < courses.size(); i++) {
+                outputFile.println(
+                        courses.get(i).getName() + "," + courses.get(i).getName() + ","
+                                + courses.get(i).getDescription());
+            }
+            outputFile.close();
+            System.out.println("Course Has Been Updated");
+            return true;
+        }
+        // if the course does not exsist then display an error message and return false
+        System.out.println("Course Does Not Exist");
+        return false;
+    }
+}
