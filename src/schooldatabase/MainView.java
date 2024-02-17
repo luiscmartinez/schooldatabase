@@ -44,7 +44,7 @@ public class MainView {
             showAddStudentView(root);
         });
         MenuItem viewStudent = MenuFactory.createMenuItem("View Student", () -> {
-            // showViewStudentView(root);
+            showStudentView(root);
         });
         MenuItem editStudent = MenuFactory.createMenuItem("Edit Student", () -> {
             showEditStudentView(root);
@@ -70,5 +70,10 @@ public class MainView {
     private void showEditStudentView(BorderPane root) {
         EditStudentView editStudentView = new EditStudentView(studentFileManager);
         root.setCenter(editStudentView.getFormPane());
+    }
+
+    private void showStudentView(BorderPane root) {
+        ShowStudentView showStudentView = new ShowStudentView(studentFileManager);
+        root.setCenter(showStudentView.getFormPane());
     }
 }
