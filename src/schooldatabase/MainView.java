@@ -1,6 +1,7 @@
 package schooldatabase;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,6 +29,7 @@ public class MainView {
         setupMenuBar(root);
 
         // Display welcome message
+        setupGetStartedButton(root);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -39,19 +41,34 @@ public class MainView {
         // Student Menu
         Menu studentMenu = MenuFactory.createMenu("Student");
         MenuItem addStudent = MenuFactory.createMenuItem("Add Student", () -> {
-            showAddStudentForm(root);
+            showAddStudentView(root);
+        });
+        MenuItem viewStudent = MenuFactory.createMenuItem("View Student", () -> {
+            // showViewStudentView(root);
         });
         MenuItem editStudent = MenuFactory.createMenuItem("Edit Student", () -> {
-            /* Action Here */});
+            showEditStudentView(root);
+        });
         MenuItem exitItem = MenuFactory.createMenuItem("Exit", primaryStage::close);
-        MenuFactory.addItemsToMenu(studentMenu, Arrays.asList(addStudent, editStudent, exitItem));
+        MenuFactory.addItemsToMenu(studentMenu, Arrays.asList(addStudent, viewStudent, editStudent, exitItem));
 
         menuBar.getMenus().add(studentMenu);
         root.setTop(menuBar);
     }
 
-    private void showAddStudentForm(BorderPane root) {
+    private void showAddStudentView(BorderPane root) {
         AddStudentView addStudentView = new AddStudentView(studentFileManager);
         root.setCenter(addStudentView.getFormPane());
+    }
+
+    private void setupGetStartedButton(BorderPane root) {
+        Button getStartedButton = new Button("Get Started");
+        getStartedButton.setOnAction(event -> showAddStudentView(root));
+        root.setCenter(getStartedButton);
+    }
+
+    private void showEditStudentView(BorderPane root) {
+        EditStudentView editStudentView = new EditStudentView(studentFileManager);
+        root.setCenter(editStudentView.getFormPane());
     }
 }

@@ -4,11 +4,13 @@ import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 
 public class StudentFormGenerator {
 
@@ -40,22 +42,28 @@ public class StudentFormGenerator {
         GridPane formPane = new GridPane();
         formPane.setHgap(10);
         formPane.setVgap(10);
-        // Adding form fields to the pane
-        formPane.add(new Label("First Name:"), 0, 0);
-        formPane.add(firstNameField, 1, 0);
-        formPane.add(new Label("Last Name:"), 0, 1);
-        formPane.add(lastNameField, 1, 1);
-        formPane.add(new Label("Address:"), 0, 2);
-        formPane.add(addressField, 1, 2);
-        formPane.add(new Label("City:"), 0, 3);
-        formPane.add(cityField, 1, 3);
-        formPane.add(new Label("Zipcode:"), 0, 4);
-        formPane.add(zipcodeField, 1, 4);
-        formPane.add(new Label("State:"), 0, 5);
-        formPane.add(stateComboBox, 1, 5);
+
+        Label titleLabel = new Label("New Student Form");
+        titleLabel.setFont(new Font("Arial", 18));
+        GridPane.setHalignment(titleLabel, HPos.CENTER);
+        GridPane.setColumnSpan(titleLabel, 2);
+
+        formPane.add(titleLabel, 0, 0);
+        formPane.add(new Label("First Name:"), 0, 1);
+        formPane.add(firstNameField, 1, 1);
+        formPane.add(new Label("Last Name:"), 0, 2);
+        formPane.add(lastNameField, 1, 2);
+        formPane.add(new Label("Address:"), 0, 3);
+        formPane.add(addressField, 1, 3);
+        formPane.add(new Label("City:"), 0, 4);
+        formPane.add(cityField, 1, 4);
+        formPane.add(new Label("Zipcode:"), 0, 5);
+        formPane.add(zipcodeField, 1, 5);
+        formPane.add(new Label("State:"), 0, 6);
+        formPane.add(stateComboBox, 1, 6);
 
         if (!actionButton.getText().isEmpty()) {
-            formPane.add(actionButton, 1, 6);
+            formPane.add(actionButton, 1, 7);
         }
 
         return formPane;
