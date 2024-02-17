@@ -2,12 +2,13 @@ package schooldatabase.model;
 
 public class Student {
     public int id;
-    String firstName;
-    String lastName;
-    String address;
-    String city;
-    String state;
-    String zip;
+    // delete after prepopulating form with student object instead
+    public String firstName;
+    public String lastName;
+    public String address;
+    public String city;
+    public String state;
+    public String zip;
 
     // Constructor
     public Student(int id, String firstName, String lastName, String address, String city, String state, String zip) {

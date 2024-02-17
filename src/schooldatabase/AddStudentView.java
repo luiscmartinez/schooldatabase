@@ -17,7 +17,7 @@ public class AddStudentView {
         StudentActionHandler actionHandler = new StudentActionHandler(newStudentForm, studentFileManager);
         newStudentForm.configureActionButton("Add Student", event -> actionHandler.handleAddStudent());
 
-        return newStudentForm.createForm();
+        return newStudentForm.createForm("New Student Form");
     }
 
     public GridPane getFormPane() {

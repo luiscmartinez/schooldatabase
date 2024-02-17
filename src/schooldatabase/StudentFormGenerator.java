@@ -38,12 +38,12 @@ public class StudentFormGenerator {
         actionButton = new Button();
     }
 
-    public GridPane createForm() {
+    public GridPane createForm(String formTitle) {
         GridPane formPane = new GridPane();
         formPane.setHgap(10);
         formPane.setVgap(10);
 
-        Label titleLabel = new Label("New Student Form");
+        Label titleLabel = new Label(formTitle);
         titleLabel.setFont(new Font("Arial", 18));
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         GridPane.setColumnSpan(titleLabel, 2);
