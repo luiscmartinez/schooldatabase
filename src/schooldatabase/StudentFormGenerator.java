@@ -64,6 +64,13 @@ public class StudentFormGenerator {
 
         if (!actionButton.getText().isEmpty()) {
             formPane.add(actionButton, 1, 7);
+        } else {
+            firstNameField.setEditable(false);
+            lastNameField.setEditable(false);
+            addressField.setEditable(false);
+            cityField.setEditable(false);
+            zipcodeField.setEditable(false);
+            stateComboBox.setDisable(true);
         }
 
         return formPane;

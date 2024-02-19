@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import schooldatabase.model.Course;
 import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
 
@@ -44,6 +45,9 @@ public class CourseFormGenerator {
 
         if (!actionButton.getText().isEmpty()) {
             formPane.add(actionButton, 0, 4);
+        } else {
+            courseDescriptionField.setEditable(false);
+            courseNameField.setEditable(false);
         }
 
         return formPane;
@@ -75,5 +79,10 @@ public class CourseFormGenerator {
         courseNameField.clear();
         courseNumberField.clear();
         courseDescriptionField.clear();
+    }
+
+    public void prepopulateForm(Course course) {
+        courseNameField.setText(course.getName());
+        courseDescriptionField.setText(course.getDescription());
     }
 }
