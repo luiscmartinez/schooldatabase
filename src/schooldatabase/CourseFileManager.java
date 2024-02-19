@@ -37,7 +37,7 @@ class CourseFileManager {
         }
     }
 
-    Course GetCourse(int cid) throws EmptyFieldException, IOException {
+    Course getCourse(int cid) throws EmptyFieldException, IOException {
         // try{
         if (cid == 0) {
             throw new EmptyFieldException("Invalid Course ID");
@@ -53,20 +53,23 @@ class CourseFileManager {
 
     }
 
-    boolean AddCourse(int CID, String courseName, String courseDescrip) throws EmptyFieldException, IOException {
+    boolean addCourse(Course course) throws EmptyFieldException, IOException {
         // If course does not exist collect info, create new course object and add to
         // arraylist and return true
-        if (GetCourse(CID) == null) {// Call getCourse method to find if course exis
+        int CID = course.getCourseID();
+        String courseName = course.getName();
+        String courseDescrip = course.getDescription();
+
+        if (getCourse(CID) == null) {// Call getCourse method to find if course exis
             if (courseName.equals("") || courseDescrip.equals("")) {
                 throw new EmptyFieldException("Course ID Field is Blank");
             } else {
-                Course cour = new Course(CID, courseName, courseDescrip);
-                courses.add(cour);
+                courses.add(course);
 
                 // Append the new course object to the file
                 FileWriter fwriter = new FileWriter(filename, true);
                 PrintWriter outputFile = new PrintWriter(fwriter);
-                outputFile.println(cour.getCourseID() + "," + cour.getName() + "," + cour.getDescription());
+                outputFile.println(CID + "," + courseName + "," + courseDescrip);
                 outputFile.close();
 
                 System.out.println("Course has been added");// Confirmation Statement
@@ -81,8 +84,8 @@ class CourseFileManager {
     boolean updateCourse(int cid, String courName, String courseDescription) throws IOException, EmptyFieldException {
         // Check if course exists, if it does then update the course object and return
         // true
-        if (GetCourse(cid) != null) {
-            Course cour = GetCourse(cid);
+        if (getCourse(cid) != null) {
+            Course cour = getCourse(cid);
             int index = courses.indexOf(cour);// Find the location of the course in the arraylist
             cour.setID(cid);
             cour.setName(courName);

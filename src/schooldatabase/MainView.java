@@ -12,10 +12,12 @@ import java.util.Arrays;
 public class MainView {
     private Stage primaryStage;
     private StudentFileManager studentFileManager;
+    private CourseFileManager courseFileManager;
 
-    public MainView(Stage primaryStage, StudentFileManager studentFileManager) {
+    public MainView(Stage primaryStage, StudentFileManager studentFileManager, CourseFileManager courseFileManager) {
         this.primaryStage = primaryStage;
         this.studentFileManager = studentFileManager;
+        this.courseFileManager = courseFileManager;
         initializeView();
     }
 
@@ -52,7 +54,15 @@ public class MainView {
         MenuItem exitItem = MenuFactory.createMenuItem("Exit", primaryStage::close);
         MenuFactory.addItemsToMenu(studentMenu, Arrays.asList(addStudent, viewStudent, editStudent, exitItem));
 
+        // Course Menu
+        Menu courseMenu = MenuFactory.createMenu("Course");
+        MenuItem addCourse = MenuFactory.createMenuItem("Add Course", () -> {
+            showAddCourseView(root);
+        });
+        MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse));
+
         menuBar.getMenus().add(studentMenu);
+        menuBar.getMenus().add(courseMenu);
         root.setTop(menuBar);
     }
 
@@ -75,5 +85,10 @@ public class MainView {
     private void showStudentView(BorderPane root) {
         ShowStudentView showStudentView = new ShowStudentView(studentFileManager);
         root.setCenter(showStudentView.getFormPane());
+    }
+
+    private void showAddCourseView(BorderPane root) {
+        AddCourseView addCourseView = new AddCourseView(courseFileManager);
+        root.setCenter(addCourseView.getFormPane());
     }
 }
