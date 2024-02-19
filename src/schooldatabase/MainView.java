@@ -13,11 +13,14 @@ public class MainView {
     private Stage primaryStage;
     private StudentFileManager studentFileManager;
     private CourseFileManager courseFileManager;
+    private EnrollmentFileManager enrollmentFileManager;
 
-    public MainView(Stage primaryStage, StudentFileManager studentFileManager, CourseFileManager courseFileManager) {
+    public MainView(Stage primaryStage, StudentFileManager studentFileManager, CourseFileManager courseFileManager,
+            EnrollmentFileManager enrollmentFileManager) {
         this.primaryStage = primaryStage;
         this.studentFileManager = studentFileManager;
         this.courseFileManager = courseFileManager;
+        this.enrollmentFileManager = enrollmentFileManager;
         initializeView();
     }
 
@@ -67,10 +70,19 @@ public class MainView {
         MenuItem editCourse = MenuFactory.createMenuItem("Edit Course", () -> {
             showEditCourseView(root);
         });
+
         MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse, viewCourse, editCourse));
+
+        // Enrollment Menu
+        Menu enrollmentMenu = MenuFactory.createMenu("Enrollment");
+        MenuItem addEnrollment = MenuFactory.createMenuItem("Add Enrollment", () -> {
+            showAddEnrollmentView(root);
+        });
+        MenuFactory.addItemsToMenu(enrollmentMenu, Arrays.asList(addEnrollment));
 
         menuBar.getMenus().add(studentMenu);
         menuBar.getMenus().add(courseMenu);
+        menuBar.getMenus().add(enrollmentMenu);
         root.setTop(menuBar);
     }
 
@@ -108,5 +120,11 @@ public class MainView {
     private void showEditCourseView(BorderPane root) {
         EditCourseView editCourseView = new EditCourseView(courseFileManager);
         root.setCenter(editCourseView.getFormPane());
+    }
+
+    private void showAddEnrollmentView(BorderPane root) {
+        AddEnrollmentView addEnrollmentView = new AddEnrollmentView(enrollmentFileManager, studentFileManager,
+                courseFileManager);
+        root.setCenter(addEnrollmentView.createFormPane());
     }
 }

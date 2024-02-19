@@ -10,9 +10,12 @@ public class Main extends Application {
     static CourseFileManager courseFileManager = new CourseFileManager(
             "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/courses.txt");
 
+    static EnrollmentFileManager enrollmentFileManager = new EnrollmentFileManager(
+            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
+
     @Override
     public void start(Stage primaryStage) {
-        new MainView(primaryStage, studentFileManager, courseFileManager);
+        new MainView(primaryStage, studentFileManager, courseFileManager, enrollmentFileManager);
     }
 
     public static void main(String[] args) {
