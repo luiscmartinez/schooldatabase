@@ -1,5 +1,9 @@
 package schooldatabase;
 
+import java.io.IOException;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import schooldatabase.model.Course;
 
 public class CourseActionHandler {
@@ -19,11 +23,24 @@ public class CourseActionHandler {
         try {
             if (courseFileManager.addCourse(newCourse)) {
                 System.out.println("Course added successfully!");
+                Alert alert = new Alert(Alert.AlertType.NONE, "Course ID: " + courseID + "\nCourse Name: " + courseName
+                        + "\nCourse Description: " + courseDescription, ButtonType.OK);
+                alert.setHeaderText("Course Was Added");
+                alert.showAndWait();
             } else {
                 System.out.println("Failed to add course!");
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Course Already Exists ", ButtonType.OK);
+                alert.showAndWait();
             }
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+        } catch (IOException ioe) {
+            System.out.println("Error: " + ioe.getMessage());
+        } catch (EmptyFieldException EFE) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
+            alert.showAndWait();
+        } catch (Exception exc) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(), ButtonType.OK);
+            alert.showAndWait();
         }
+        courseForm.clearForm();
     }
 }

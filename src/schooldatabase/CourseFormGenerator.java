@@ -70,4 +70,10 @@ public class CourseFormGenerator {
     public TextField getCourseNameField() {
         return courseNameField;
     }
+
+    public void clearForm() {
+        courseNameField.clear();
+        courseNumberField.clear();
+        courseDescriptionField.clear();
+    }
 }
