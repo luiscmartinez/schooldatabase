@@ -63,7 +63,11 @@ public class MainView {
         MenuItem viewCourse = MenuFactory.createMenuItem("View Course", () -> {
             showCourseView(root);
         });
-        MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse, viewCourse));
+
+        MenuItem editCourse = MenuFactory.createMenuItem("Edit Course", () -> {
+            showEditCourseView(root);
+        });
+        MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse, viewCourse, editCourse));
 
         menuBar.getMenus().add(studentMenu);
         menuBar.getMenus().add(courseMenu);
@@ -99,5 +103,10 @@ public class MainView {
     private void showCourseView(BorderPane root) {
         ShowCourseView showCourseView = new ShowCourseView(courseFileManager);
         root.setCenter(showCourseView.getFormPane());
+    }
+
+    private void showEditCourseView(BorderPane root) {
+        EditCourseView editCourseView = new EditCourseView(courseFileManager);
+        root.setCenter(editCourseView.getFormPane());
     }
 }

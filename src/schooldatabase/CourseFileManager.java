@@ -96,7 +96,7 @@ class CourseFileManager {
             PrintWriter outputFile = new PrintWriter(fwriter);
             for (int i = 0; i < courses.size(); i++) {
                 outputFile.println(
-                        courses.get(i).getName() + "," + courses.get(i).getName() + ","
+                        courses.get(i).getCourseID() + "," + "," + courses.get(i).getName() + ","
                                 + courses.get(i).getDescription());
             }
             outputFile.close();
