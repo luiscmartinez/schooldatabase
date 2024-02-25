@@ -38,6 +38,14 @@ public class Enrollment {
         this.grade = grade;
     }
 
+    public String getYear() {
+        return this.year;
+    }
+
+    public String getSemester() {
+        return this.semester;
+    }
+
     public int getSID() {
         return this.SID;
     }
@@ -48,5 +56,9 @@ public class Enrollment {
 
     public int getEID() {
         return this.EID;
+    }
+
+    public char getGrade() {
+        return this.grade;
     }
 }

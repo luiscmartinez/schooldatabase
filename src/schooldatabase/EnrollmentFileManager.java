@@ -48,7 +48,7 @@ public class EnrollmentFileManager {
         if (year.equals("") || semester == null || grade == ' ') {
             throw new EmptyFieldException("One or More Fields Are Empty");
         } else {
-            if (getEnrollment(EID, CID, SID, year, semester) == null) {
+            if (getEnrollment(EID) == null) {
                 Enrollment enroll = new Enrollment(EID, SID, CID, year, semester, grade);
                 enrollments.add(enroll);
 
@@ -67,7 +67,7 @@ public class EnrollmentFileManager {
         }
     }
 
-    Enrollment getEnrollment(int eid, int cid, int sid, String Year, String Semester)
+    Enrollment getEnrollment(int eid)
             throws EmptyFieldException, IOException {
         Enrollment current;
         for (int i = 0; i < enrollments.size(); i++) {

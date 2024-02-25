@@ -17,10 +17,17 @@ public class AddEnrollmentView {
         this.formPane = createFormPane();
     }
 
-    public GridPane createFormPane() {
-        // Initialize and configure the EnrollmentFormGenerator
-        EnrollmentFormGenerator newEnrollmentForm = new EnrollmentFormGenerator(enrollmentFileManager,
+    private GridPane createFormPane() {
+        EnrollmentFormGenerator newEnrollmentForm = new EnrollmentFormGenerator();
+        EnrollmentActionHandler actionHandler = new EnrollmentActionHandler(newEnrollmentForm, enrollmentFileManager,
                 studentFileManager, courseFileManager);
-        return newEnrollmentForm.getFormPane();
+
+        newEnrollmentForm.configureActionButton("submit enrollment", event -> actionHandler.handleAddEnrollment());
+
+        return newEnrollmentForm.createFormPane("Add Enrollment Form");
+    }
+
+    public GridPane getFormPane() {
+        return this.formPane;
     }
 }

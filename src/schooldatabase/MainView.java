@@ -78,7 +78,10 @@ public class MainView {
         MenuItem addEnrollment = MenuFactory.createMenuItem("Add Enrollment", () -> {
             showAddEnrollmentView(root);
         });
-        MenuFactory.addItemsToMenu(enrollmentMenu, Arrays.asList(addEnrollment));
+        MenuItem viewEnrollment = MenuFactory.createMenuItem("View Enrollment", () -> {
+            showViewEnrollmentView(root);
+        });
+        MenuFactory.addItemsToMenu(enrollmentMenu, Arrays.asList(addEnrollment, viewEnrollment));
 
         menuBar.getMenus().add(studentMenu);
         menuBar.getMenus().add(courseMenu);
@@ -125,6 +128,11 @@ public class MainView {
     private void showAddEnrollmentView(BorderPane root) {
         AddEnrollmentView addEnrollmentView = new AddEnrollmentView(enrollmentFileManager, studentFileManager,
                 courseFileManager);
-        root.setCenter(addEnrollmentView.createFormPane());
+        root.setCenter(addEnrollmentView.getFormPane());
+    }
+
+    private void showViewEnrollmentView(BorderPane root) {
+        ShowEnrollmentView showEnrollmentView = new ShowEnrollmentView(enrollmentFileManager);
+        root.setCenter(showEnrollmentView.getFormPane());
     }
 }
