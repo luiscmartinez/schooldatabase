@@ -79,4 +79,32 @@ public class EnrollmentFileManager {
         }
         return null;
     }
+
+    boolean updateEnrollment(int eid, int sid, int cid, String year, String semester, char grade)
+            throws IOException, EmptyFieldException {
+        if (year.equals("") || semester == null || grade == ' ') {
+            throw new EmptyFieldException("One or More Fields Are Empty");
+        } else {
+            Enrollment current;
+            for (int i = 0; i < enrollments.size(); i++) {
+                current = enrollments.get(i);
+                int Eid = current.getEID();
+                if (Eid == eid) {
+                    Enrollment updatedEnrollment = new Enrollment(Eid, cid, sid, year, semester, grade);
+                    enrollments.set(i, updatedEnrollment);
+                    break;
+                }
+            }
+            // Write the updated array list to the file
+            FileWriter fwriter = new FileWriter(filename);
+            PrintWriter outputFile = new PrintWriter(fwriter);
+            for (int i = 0; i < enrollments.size(); i++) {
+                current = enrollments.get(i);
+                outputFile.println(current.getEID() + "," + current.getSID() + "," + current.getCID() + ","
+                        + current.getYear() + "," + current.getSemester() + "," + current.getGrade());
+            }
+            outputFile.close();
+            return true;
+        }
+    }
 }

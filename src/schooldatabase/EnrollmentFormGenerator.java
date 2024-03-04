@@ -82,11 +82,11 @@ public class EnrollmentFormGenerator {
         return yearField;
     }
 
-    public ComboBox<Character> getGradeComboBox() {
-        return gradeComboBox;
+    public char getGradeComboBox() {
+        return gradeComboBox.getValue().charValue();
     }
 
-    public ComboBox<String> getSemesterComboBox() {
-        return semesterComboBox;
+    public String getSemesterComboBox() {
+        return semesterComboBox.getValue();
     }
 }
