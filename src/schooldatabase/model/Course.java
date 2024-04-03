@@ -1,6 +1,6 @@
 package schooldatabase.model;
 
-public class Course {
+public class Course implements Comparable<Course> {
     int courseID;
     String name, description;
 
@@ -36,5 +36,11 @@ public class Course {
 
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public int compareTo(Course o) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
     }
 }

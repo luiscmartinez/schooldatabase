@@ -13,14 +13,12 @@ import javafx.event.ActionEvent;
 
 public class CourseFormGenerator {
     private TextField courseNameField;
-    private TextField courseNumberField;
     private TextField courseDescriptionField;
     private Button actionButton;
 
     public CourseFormGenerator() {
         // Initialize form components
         courseNameField = new TextField();
-        courseNumberField = new TextField();
         courseDescriptionField = new TextField();
         actionButton = new Button();
     }
@@ -38,13 +36,11 @@ public class CourseFormGenerator {
         formPane.add(titleLabel, 0, 0);
         formPane.add(new Label("Course Name:"), 0, 1);
         formPane.add(courseNameField, 1, 1);
-        formPane.add(new Label("Course Number:"), 0, 2);
-        formPane.add(courseNumberField, 1, 2);
-        formPane.add(new Label("Course Description:"), 0, 3);
-        formPane.add(courseDescriptionField, 1, 3);
+        formPane.add(new Label("Course Description:"), 0, 2);
+        formPane.add(courseDescriptionField, 1, 2);
 
         if (!actionButton.getText().isEmpty()) {
-            formPane.add(actionButton, 0, 4);
+            formPane.add(actionButton, 0, 3);
         } else {
             courseDescriptionField.setEditable(false);
             courseNameField.setEditable(false);
@@ -63,10 +59,6 @@ public class CourseFormGenerator {
         return courseNameField.getText();
     }
 
-    public String getCourseNumber() {
-        return courseNumberField.getText();
-    }
-
     public String getCourseDescriptionField() {
         return courseDescriptionField.getText();
     }
@@ -77,7 +69,6 @@ public class CourseFormGenerator {
 
     public void clearForm() {
         courseNameField.clear();
-        courseNumberField.clear();
         courseDescriptionField.clear();
     }
 

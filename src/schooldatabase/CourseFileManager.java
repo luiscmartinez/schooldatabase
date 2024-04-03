@@ -3,12 +3,12 @@ package schooldatabase;
 import java.util.Scanner;
 
 import schooldatabase.model.Course;
+import schooldatabase.model.GenericList;
 
 import java.io.*;
-import java.util.ArrayList;
 
 class CourseFileManager {
-    ArrayList<Course> courses = new ArrayList<Course>(); // arrayList<Courset>
+    GenericList<Course> courses = new GenericList<Course>();
     String filename;
 
     // Constructor
@@ -86,24 +86,22 @@ class CourseFileManager {
         // true
         if (getCourse(cid) != null) {
             Course cour = getCourse(cid);
-            int index = courses.indexOf(cour);// Find the location of the course in the arraylist
             cour.setID(cid);
             cour.setName(courName);
             cour.setDescription(courseDescription);
-            courses.set(index, cour);// replace cour
             // print every course in Arraylist in a wiped fi;e
             FileWriter fwriter = new FileWriter(filename);
             PrintWriter outputFile = new PrintWriter(fwriter);
             for (int i = 0; i < courses.size(); i++) {
                 outputFile.println(
-                        courses.get(i).getCourseID() + "," + "," + courses.get(i).getName() + ","
+                        courses.get(i).getCourseID() + "," + courses.get(i).getName() + ","
                                 + courses.get(i).getDescription());
             }
             outputFile.close();
             System.out.println("Course Has Been Updated");
             return true;
         }
-        // if the course does not exsist then display an error message and return false
+        // if the course does not exist then display an error message and return false
         System.out.println("Course Does Not Exist");
         return false;
     }

@@ -21,9 +21,10 @@ public class Student implements Comparable<Student> {
         this.zip = zip;
     }
 
-    // TODO: Compare what??
+    @Override
     public int compareTo(Student o) {
-        return this.id - o.id;
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
     }
 
     public void setId(int id) {
