@@ -1,3 +1,11 @@
+# PreRequisites
+
+Create 3 txt files inside of src/databases
+
+- enrollments.txt
+- students.txt
+- courses.txt
+
 ## Getting Started
 
 Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
