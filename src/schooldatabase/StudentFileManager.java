@@ -7,11 +7,12 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import schooldatabase.model.GenericList;
 import schooldatabase.model.Student;
 
 public class StudentFileManager {
     String filename;
-    ArrayList<Student> students = new ArrayList<>();
+    GenericList<Student> students = new GenericList<>();
 
     public StudentFileManager(String filename) {
         this.filename = filename;
@@ -88,7 +89,9 @@ public class StudentFileManager {
                 stud.setState(state);
                 stud.setZip(zip);
                 try (FileWriter fwriter = new FileWriter(filename); PrintWriter outputFile = new PrintWriter(fwriter)) {
-                    for (Student s : students) {
+
+                    for (int i = 0; i < students.size(); i++) {
+                        Student s = students.get(i);
                         outputFile.println(s.toString());
                     }
                 }

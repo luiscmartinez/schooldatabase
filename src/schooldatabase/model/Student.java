@@ -1,6 +1,6 @@
 package schooldatabase.model;
 
-public class Student {
+public class Student implements Comparable<Student> {
     public int id;
     // delete after prepopulating form with student object instead
     public String firstName;
@@ -19,6 +19,11 @@ public class Student {
         this.city = city;
         this.state = state;
         this.zip = zip;
+    }
+
+    // TODO: Compare what??
+    public int compareTo(Student o) {
+        return this.id - o.id;
     }
 
     public void setId(int id) {

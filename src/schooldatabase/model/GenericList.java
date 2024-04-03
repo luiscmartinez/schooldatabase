@@ -24,7 +24,7 @@ public class GenericList<T extends Comparable<T>> {
             first = newNode;
         } else {
             Node<T> lastNode = goToLastNode(first);
-            lastNode.next = lastNode;
+            lastNode.next = newNode;
         }
         count++;
     }
