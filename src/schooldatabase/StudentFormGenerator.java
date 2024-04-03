@@ -4,13 +4,18 @@ import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
+import schooldatabase.client.ZipCodeClient;
+import schooldatabase.model.ZipCode;
 
 public class StudentFormGenerator {
 
@@ -47,7 +52,24 @@ public class StudentFormGenerator {
         titleLabel.setFont(new Font("Arial", 18));
         GridPane.setHalignment(titleLabel, HPos.CENTER);
         GridPane.setColumnSpan(titleLabel, 2);
-
+        Button searchButton = new Button("Search Zipcode");
+        searchButton.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent e) {
+                        try {
+                            System.out.println("Search zipcode: " + getZipcode());
+                            ZipCodeClient apiRequest = new ZipCodeClient(getZipcode());
+                            ZipCode zipCode = apiRequest.fetchZipCodeInfo();
+                            zipCode.getPlaces()[0].getStateAbbreviation();
+                            stateComboBox.setValue(zipCode.getPlaces()[0].getStateAbbreviation());
+                            cityField.setText(zipCode.getPlaces()[0].getPlaceName());
+                        } catch (Exception exception) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "Not a valid zipcode", ButtonType.OK);
+                            alert.showAndWait();
+                        }
+                    }
+                });
         formPane.add(titleLabel, 0, 0);
         formPane.add(new Label("First Name:"), 0, 1);
         formPane.add(firstNameField, 1, 1);
@@ -59,6 +81,7 @@ public class StudentFormGenerator {
         formPane.add(cityField, 1, 4);
         formPane.add(new Label("Zipcode:"), 0, 5);
         formPane.add(zipcodeField, 1, 5);
+        formPane.add(searchButton, 2, 5);
         formPane.add(new Label("State:"), 0, 6);
         formPane.add(stateComboBox, 1, 6);
 

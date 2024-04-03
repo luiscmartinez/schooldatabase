@@ -39,6 +39,7 @@ public class GenericList<T extends Comparable<T>> {
             Node<T> Nodeptr = first;
             Node<T> prevNode = null;
             int hopCount = 0;
+            // stops at the before the position to insert the new node
             while (hopCount < count && hopCount < pos) {
                 if (Nodeptr != null) {
                     prevNode = Nodeptr;
