@@ -81,12 +81,12 @@ public class StudentFormGenerator {
         formPane.add(cityField, 1, 4);
         formPane.add(new Label("Zipcode:"), 0, 5);
         formPane.add(zipcodeField, 1, 5);
-        formPane.add(searchButton, 2, 5);
         formPane.add(new Label("State:"), 0, 6);
         formPane.add(stateComboBox, 1, 6);
 
         if (!actionButton.getText().isEmpty()) {
             formPane.add(actionButton, 1, 7);
+            formPane.add(searchButton, 2, 5);
         } else {
             firstNameField.setEditable(false);
             lastNameField.setEditable(false);
