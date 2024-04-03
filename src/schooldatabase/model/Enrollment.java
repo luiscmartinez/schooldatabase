@@ -1,6 +1,6 @@
 package schooldatabase.model;
 
-public class Enrollment {
+public class Enrollment implements Comparable<Enrollment> {
     int SID, CID, EID;
     String year, semester;
     char grade;
@@ -60,5 +60,11 @@ public class Enrollment {
 
     public char getGrade() {
         return this.grade;
+    }
+
+    @Override
+    public int compareTo(Enrollment o) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'compareTo'");
     }
 }

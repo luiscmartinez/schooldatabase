@@ -4,14 +4,14 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.Scanner;
 
 import schooldatabase.model.Enrollment;
+import schooldatabase.model.GenericList;
 
 public class EnrollmentFileManager {
     String filename;
-    ArrayList<Enrollment> enrollments = new ArrayList<Enrollment>();// arrayList<Enrollment>
+    GenericList<Enrollment> enrollments = new GenericList<Enrollment>();// arrayList<Enrollment>
 
     // Constructure
     EnrollmentFileManager(String filename) {
@@ -91,7 +91,10 @@ public class EnrollmentFileManager {
                 int Eid = current.getEID();
                 if (Eid == eid) {
                     Enrollment updatedEnrollment = new Enrollment(Eid, cid, sid, year, semester, grade);
-                    enrollments.set(i, updatedEnrollment);
+
+                    enrollments.add(updatedEnrollment, i);
+
+                    enrollments.delete(i + 1);
                     break;
                 }
             }

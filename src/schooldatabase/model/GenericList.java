@@ -29,6 +29,34 @@ public class GenericList<T extends Comparable<T>> {
         count++;
     }
 
+    public void add(T element, int pos) {
+        Node<T> newNode = new Node<T>();
+        newNode.value = element;
+        newNode.next = null;
+        if (first == null) {
+            first = newNode;
+        } else {
+            Node<T> Nodeptr = first;
+            Node<T> prevNode = null;
+            int hopCount = 0;
+            while (hopCount < count && hopCount < pos) {
+                if (Nodeptr != null) {
+                    prevNode = Nodeptr;
+                    Nodeptr = Nodeptr.next;
+                }
+                hopCount++;
+            }
+            if (prevNode == null) {
+                newNode.next = first;
+                first = newNode;
+            } else {
+                prevNode.next = newNode;
+                newNode.next = Nodeptr;
+            }
+        }
+        count++;
+    }
+
     private Node<T> goToLastNode(Node<T> nodePointer) {
         if (nodePointer == null) {
             return nodePointer;
@@ -46,9 +74,7 @@ public class GenericList<T extends Comparable<T>> {
 
     }
 
-    public T get(int pos)
-
-    {
+    public T get(int pos) {
         Node<T> Nodeptr = first;
         int hopCount = 0;
         while (hopCount < count && hopCount < pos) {
@@ -59,6 +85,27 @@ public class GenericList<T extends Comparable<T>> {
         }
         return Nodeptr.value;
 
+    }
+
+    public void delete(int i) {
+        if (i == 0) {
+            first = first.next;
+        } else {
+            Node<T> Nodeptr = first;
+            Node<T> prevNode = null;
+            int hopCount = 0;
+            while (hopCount < count && hopCount < i) {
+                if (Nodeptr != null) {
+                    prevNode = Nodeptr;
+                    Nodeptr = Nodeptr.next;
+                }
+                hopCount++;
+            }
+            if (Nodeptr != null) {
+                prevNode.next = Nodeptr.next;
+            }
+        }
+        count--;
     }
 
     public int size() {
