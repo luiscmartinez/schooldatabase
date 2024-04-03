@@ -38,8 +38,8 @@ public class StudentFileManager {
         }
     }
 
-    public boolean addStudent(int id, String firstName, String lastName, String address, String city, String state,
-            String zip) throws EmptyFieldException, IOException {
+    public boolean addStudent(int id, String firstName, String lastName, String address, String city, String zip,
+            String state) throws EmptyFieldException, IOException {
         if (getStudent(id) == null) {
             if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || city.isEmpty() || state == null
                     || zip.isEmpty()) {
