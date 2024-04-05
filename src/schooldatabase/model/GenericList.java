@@ -10,10 +10,10 @@ public class GenericList<T extends Comparable<T>> {
     private class Node<T> {
         T value;
         Node<T> next;
-
     }
 
     private Node<T> first = null;
+    private Node<T> last = null;
     int count = 0;
 
     public void add(T element) {
@@ -22,9 +22,10 @@ public class GenericList<T extends Comparable<T>> {
         newNode.next = null;
         if (first == null) {
             first = newNode;
+            last = newNode;
         } else {
-            Node<T> lastNode = goToLastNode(first);
-            lastNode.next = newNode;
+            last.next = newNode;
+            last = newNode;
         }
         count++;
     }
