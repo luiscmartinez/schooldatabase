@@ -14,13 +14,18 @@ public class MainView {
     private StudentFileManager studentFileManager;
     private CourseFileManager courseFileManager;
     private EnrollmentFileManager enrollmentFileManager;
+    private InstructorFileManager instructorFileManager;
+    private DepartmentFileManager departmentFileManager;
 
     public MainView(Stage primaryStage, StudentFileManager studentFileManager, CourseFileManager courseFileManager,
-            EnrollmentFileManager enrollmentFileManager) {
+            EnrollmentFileManager enrollmentFileManager, InstructorFileManager instructorFileManager,
+            DepartmentFileManager departmentFileManager) {
         this.primaryStage = primaryStage;
         this.studentFileManager = studentFileManager;
         this.courseFileManager = courseFileManager;
         this.enrollmentFileManager = enrollmentFileManager;
+        this.instructorFileManager = instructorFileManager;
+        this.departmentFileManager = departmentFileManager;
         initializeView();
     }
 
@@ -70,6 +75,29 @@ public class MainView {
         MenuItem editCourse = MenuFactory.createMenuItem("Edit Course", () -> {
             showEditCourseView(root);
         });
+        // Instructor Menu
+        Menu instructorMenu = MenuFactory.createMenu("Instructor");
+        MenuItem addInstructor = MenuFactory.createMenuItem("Add Instructor", () -> {
+            showAddInstructorView(root);
+        });
+
+        MenuItem editInstructor = MenuFactory.createMenuItem("Edit Instructor", () -> {
+            showEditInstructorView(root);
+        });
+
+        // Department Menu
+        Menu departmentMenu = MenuFactory.createMenu("Department");
+        MenuItem addDepartment = MenuFactory.createMenuItem("Add Department", () -> {
+            showAddDepartmentView(root);
+        });
+
+        MenuItem editDepartment = MenuFactory.createMenuItem("Edit Department", () -> {
+            showEditDepartmentView(root);
+        });
+
+        MenuFactory.addItemsToMenu(departmentMenu, Arrays.asList(addDepartment, editDepartment));
+
+        MenuFactory.addItemsToMenu(instructorMenu, Arrays.asList(addInstructor, editInstructor));
 
         MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse, viewCourse, editCourse));
 
@@ -89,6 +117,8 @@ public class MainView {
         menuBar.getMenus().add(studentMenu);
         menuBar.getMenus().add(courseMenu);
         menuBar.getMenus().add(enrollmentMenu);
+        menuBar.getMenus().add(instructorMenu);
+        menuBar.getMenus().add(departmentMenu);
         root.setTop(menuBar);
     }
 
@@ -143,5 +173,29 @@ public class MainView {
         EditEnrollmentView editEnrollmentView = new EditEnrollmentView(enrollmentFileManager, studentFileManager,
                 courseFileManager);
         root.setCenter(editEnrollmentView.getFormPane());
+    }
+
+    private void showAddInstructorView(BorderPane root) {
+        // AddInstructorView addInstructorView = new
+        // AddInstructorView(instructorFileManager);
+        // root.setCenter(addInstructorView.getFormPane());
+    }
+
+    private void showEditInstructorView(BorderPane root) {
+        // EditInstructorView editInstructorView = new
+        // EditInstructorView(instructorFileManager);
+        // root.setCenter(editInstructorView.getFormPane());
+    }
+
+    private void showAddDepartmentView(BorderPane root) {
+        // AddDepartmentView addDepartmentView = new
+        // AddDepartmentView(departmentFileManager);
+        // root.setCenter(addDepartmentView.getFormPane());
+    }
+
+    private void showEditDepartmentView(BorderPane root) {
+        // EditDepartmentView editDepartmentView = new
+        // EditDepartmentView(departmentFileManager);
+        // root.setCenter(editDepartmentView.getFormPane());
     }
 }
