@@ -1,6 +1,9 @@
 package schooldatabase;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,5 +36,28 @@ public class DepartmentFileManager {
             // TODO: handle exception
             System.out.println("Error" + e.getMessage());
         }
+    }
+
+    public boolean addDepartment(int departmentId, String departmentName) throws IOException {
+        Department department = new Department(departmentId, departmentName);
+        try (FileWriter fwriter = new FileWriter(filename, true);
+                PrintWriter outputFile = new PrintWriter(fwriter)) {
+            outputFile.println(department.toString());
+        }
+        if (getDepartment(departmentId) == null) {
+            departments.add(department);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Department getDepartment(int departmentId) {
+        for (Department department : departments) {
+            if (department.getId() == departmentId) {
+                return department;
+            }
+        }
+        return null;
     }
 }

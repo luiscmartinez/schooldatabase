@@ -188,9 +188,8 @@ public class MainView {
     }
 
     private void showAddDepartmentView(BorderPane root) {
-        // AddDepartmentView addDepartmentView = new
-        // AddDepartmentView(departmentFileManager);
-        // root.setCenter(addDepartmentView.getFormPane());
+        AddDepartmentView addDepartmentView = new AddDepartmentView(departmentFileManager);
+        root.setCenter(addDepartmentView.getFormPane());
     }
 
     private void showEditDepartmentView(BorderPane root) {
