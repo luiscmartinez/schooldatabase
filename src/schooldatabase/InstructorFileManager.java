@@ -1,6 +1,9 @@
 package schooldatabase;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -33,5 +36,30 @@ public class InstructorFileManager {
         } catch (Exception e) {
             System.out.println("Error" + e.getMessage());
         }
+    }
+
+    public boolean addInstructor(int instructorId, String instructorName, String instructorDepartment)
+            throws IOException {
+        Instructor instructor = new Instructor(instructorId, instructorName, instructorDepartment);
+        try (FileWriter fwriter = new FileWriter(filename, true);
+                PrintWriter outputFile = new PrintWriter(fwriter)) {
+            outputFile.println(instructor.toString());
+        }
+
+        if (getInstructor(instructorId) == null) {
+            instructors.add(instructor);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public Instructor getInstructor(int instructorId) {
+        for (Instructor instructor : instructors) {
+            if (instructor.getId() == instructorId) {
+                return instructor;
+            }
+        }
+        return null;
     }
 }

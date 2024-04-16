@@ -35,4 +35,9 @@ public class Instructor {
         return this.department;
     }
 
+    @Override
+    public String toString() {
+        return id + "," + name + "," + department;
+    }
+
 }

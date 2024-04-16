@@ -176,9 +176,8 @@ public class MainView {
     }
 
     private void showAddInstructorView(BorderPane root) {
-        // AddInstructorView addInstructorView = new
-        // AddInstructorView(instructorFileManager);
-        // root.setCenter(addInstructorView.getFormPane());
+        AddInstructorView addInstructorView = new AddInstructorView(instructorFileManager, departmentFileManager);
+        root.setCenter(addInstructorView.getFormPane());
     }
 
     private void showEditInstructorView(BorderPane root) {

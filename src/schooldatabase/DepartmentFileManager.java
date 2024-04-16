@@ -60,4 +60,13 @@ public class DepartmentFileManager {
         }
         return null;
     }
+
+    public ArrayList<String> getDepartmentNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (Department department : departments) {
+            names.add(department.getName());
+        }
+        return names;
+    }
+
 }
