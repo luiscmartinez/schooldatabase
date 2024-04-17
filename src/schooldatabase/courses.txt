@@ -1,0 +1,6 @@
+1,CS 102,Intro to Computer,Business, Carlos
+2,CS 222,Supporting Windows, Math, Smith
+3,fgdgfds,fdsaasdf,Math,Smith
+4,gfdafdsa,fasdfas,Communications, MyHanh
+5,qerwqwr,qwerewr,Business,Carlos
+6,Music 101,Intro to Music,Business,Carlos

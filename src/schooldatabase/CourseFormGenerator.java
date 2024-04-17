@@ -39,9 +39,6 @@ public class CourseFormGenerator {
             updateInstructorComboBox(newValue); // This method will handle the updating of professors
         });
 
-        // departmentComboBox.setOnAction(e -> {
-        // instructorComboBox.setItems(FXCollections.observableArrayList(instructorFileManager.getInstructorsByDepartment(departmentComboBox.getValue());
-        // });
     }
 
     private void updateInstructorComboBox(String department) {
