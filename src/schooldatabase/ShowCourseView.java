@@ -13,10 +13,14 @@ import schooldatabase.model.Course;
 
 public class ShowCourseView {
     private CourseFileManager courseFileManager;
+    private DepartmentFileManager departmentFileManager;
+    private InstructorFileManager instructorFileManager;
     private GridPane formPane;
 
-    public ShowCourseView(CourseFileManager courseFileManager) {
+    public ShowCourseView(CourseFileManager courseFileManager, DepartmentFileManager departmentFileManager) {
         this.courseFileManager = courseFileManager;
+        this.departmentFileManager = departmentFileManager;
+        this.instructorFileManager = instructorFileManager;
         this.formPane = createFormPane();
     }
 
@@ -32,7 +36,8 @@ public class ShowCourseView {
                         Course course;
                         try {
                             course = courseFileManager.getCourse(Integer.parseInt(courseIdInput.getText()));
-                            CourseFormGenerator courseForm = new CourseFormGenerator();
+                            CourseFormGenerator courseForm = new CourseFormGenerator(departmentFileManager,
+                                    instructorFileManager);
                             courseForm.prepopulateForm(course);
                             formPane.add(courseForm.createForm("View Course Read Only Form"), 0, 1);
                         } catch (EmptyFieldException EFE) {

@@ -2,12 +2,14 @@ package schooldatabase.model;
 
 public class Course implements Comparable<Course> {
     int courseID;
-    String name, description;
+    String name, description, department, instructor;
 
-    public Course(int courseID, String name, String description) {
+    public Course(int courseID, String name, String description, String department, String instructor) {
         this.courseID = courseID;
         this.name = name;
         this.description = description;
+        this.department = department;
+        this.instructor = instructor;
     }
 
     public void setID(int courseID) {
@@ -22,8 +24,16 @@ public class Course implements Comparable<Course> {
         this.description = description;
     }
 
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public void setInstructor(String instructor) {
+        this.instructor = instructor;
+    }
+
     public String toString() {
-        return courseID + "," + name + "," + description;
+        return courseID + "," + name + "," + description + "," + department + "," + instructor;
     }
 
     public int getCourseID() {
@@ -36,6 +46,14 @@ public class Course implements Comparable<Course> {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public String getInstructor() {
+        return instructor;
     }
 
     @Override

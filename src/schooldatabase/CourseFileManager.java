@@ -26,8 +26,10 @@ class CourseFileManager {
                     int courseId = Integer.parseInt(c[0]);
                     String courseName = c[1];
                     String courseDescription = c[2];
+                    String departmentName = c[3];
+                    String instructorName = c[4];
                     // Create course object using variables
-                    Course course = new Course(courseId, courseName, courseDescription);
+                    Course course = new Course(courseId, courseName, courseDescription, departmentName, instructorName);
                     courses.add(course);// Add course Object to array list
                 }
                 FileScanner.close();
@@ -59,6 +61,7 @@ class CourseFileManager {
         int CID = course.getCourseID();
         String courseName = course.getName();
         String courseDescrip = course.getDescription();
+        String courseDepartmentName = course.getDepartment();
 
         if (getCourse(CID) == null) {// Call getCourse method to find if course exis
             if (courseName.equals("") || courseDescrip.equals("")) {
@@ -69,7 +72,8 @@ class CourseFileManager {
                 // Append the new course object to the file
                 FileWriter fwriter = new FileWriter(filename, true);
                 PrintWriter outputFile = new PrintWriter(fwriter);
-                outputFile.println(CID + "," + courseName + "," + courseDescrip);
+                outputFile.println(CID + "," + courseName + "," + courseDescrip + "," + courseDepartmentName + ","
+                        + course.getInstructor());
                 outputFile.close();
 
                 System.out.println("Course has been added");// Confirmation Statement
@@ -81,7 +85,9 @@ class CourseFileManager {
         }
     }
 
-    boolean updateCourse(int cid, String courName, String courseDescription) throws IOException, EmptyFieldException {
+    boolean updateCourse(int cid, String courName, String courseDescription, String courseDepartment,
+            String courseInstructor)
+            throws IOException, EmptyFieldException {
         // Check if course exists, if it does then update the course object and return
         // true
         if (getCourse(cid) != null) {
@@ -89,13 +95,16 @@ class CourseFileManager {
             cour.setID(cid);
             cour.setName(courName);
             cour.setDescription(courseDescription);
+            cour.setDepartment(courseDepartment);
+            cour.setInstructor(courseInstructor);
             // print every course in Arraylist in a wiped fi;e
             FileWriter fwriter = new FileWriter(filename);
             PrintWriter outputFile = new PrintWriter(fwriter);
             for (int i = 0; i < courses.size(); i++) {
                 outputFile.println(
                         courses.get(i).getCourseID() + "," + courses.get(i).getName() + ","
-                                + courses.get(i).getDescription());
+                                + courses.get(i).getDescription() + "," + courses.get(i).getDepartment() + ","
+                                + courses.get(i).getInstructor());
             }
             outputFile.close();
             System.out.println("Course Has Been Updated");

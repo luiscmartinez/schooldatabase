@@ -62,4 +62,14 @@ public class InstructorFileManager {
         }
         return null;
     }
+
+    public ArrayList<String> getInstructorsByDepartment(String department) {
+        ArrayList<String> instructorsByDepartment = new ArrayList<String>();
+        for (Instructor instructor : instructors) {
+            if (instructor.getDepartment().equals(department)) {
+                instructorsByDepartment.add(instructor.getName());
+            }
+        }
+        return instructorsByDepartment;
+    }
 }

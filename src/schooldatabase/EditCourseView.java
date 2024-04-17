@@ -9,13 +9,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import schooldatabase.model.Course;
+import schooldatabase.model.Department;
 
 public class EditCourseView {
     private CourseFileManager courseFileManager;
+    private DepartmentFileManager departmentFileManager;
+    private InstructorFileManager instructorFileManager;
     private GridPane formPane;
 
-    public EditCourseView(CourseFileManager courseFileManager) {
+    public EditCourseView(CourseFileManager courseFileManager, DepartmentFileManager departmentFileManager,
+            InstructorFileManager instructorFileManager) {
         this.courseFileManager = courseFileManager;
+        this.departmentFileManager = departmentFileManager;
+        this.instructorFileManager = instructorFileManager;
         this.formPane = createFormPane();
     }
 
@@ -30,12 +36,14 @@ public class EditCourseView {
             Course course;
             try {
                 course = courseFileManager.getCourse(courseId);
-                CourseFormGenerator editCourseForm = new CourseFormGenerator();
+                CourseFormGenerator editCourseForm = new CourseFormGenerator(departmentFileManager,
+                        instructorFileManager);
                 editCourseForm.prepopulateForm(course);
                 editCourseForm.configureActionButton("Update Course", e -> {
                     try {
                         courseFileManager.updateCourse(course.getCourseID(), editCourseForm.getCourseName(),
-                                editCourseForm.getCourseDescriptionField());
+                                editCourseForm.getCourseDescriptionField(), editCourseForm.getDepartment(),
+                                editCourseForm.getInstructor());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Course Updated", ButtonType.OK);
                         alert.showAndWait();
                     } catch (IOException IOE) {

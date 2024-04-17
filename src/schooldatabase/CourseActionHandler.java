@@ -19,7 +19,8 @@ public class CourseActionHandler {
         String courseName = courseForm.getCourseNameField().getText();
         String courseDescription = courseForm.getCourseDescriptionField();
         final int courseID = courseFileManager.courses.size() + 1;
-        Course newCourse = new Course(courseID, courseName, courseDescription);
+        Course newCourse = new Course(courseID, courseName, courseDescription, courseForm.getDepartment(),
+                courseForm.getInstructor());
         try {
             if (courseFileManager.addCourse(newCourse)) {
                 System.out.println("Course added successfully!");
