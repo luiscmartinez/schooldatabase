@@ -2,6 +2,8 @@ package schooldatabase;
 
 import java.io.IOException;
 
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import schooldatabase.model.Enrollment;
 
 public class EnrollmentActionHandler {
@@ -41,6 +43,10 @@ public class EnrollmentActionHandler {
             // Assuming all validations passed, proceed to add the enrollment
             final int enrollmentID = enrollmentFileManager.enrollments.size() + 1;
             enrollmentFileManager.addEnrollment(enrollmentID, courseId, studentId, year, semester, grade);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enrollment added", ButtonType.OK);
+            alert.setHeaderText("Enrollment Added");
+            newEnrollmentForm.clearForm();
+            alert.showAndWait();
 
         } catch (NumberFormatException e) {
             // Handle parsing errors for courseId and studentId
@@ -77,6 +83,9 @@ public class EnrollmentActionHandler {
 
             // Assuming all validations passed, proceed to add the enrollment
             enrollmentFileManager.updateEnrollment(enrollmentId, courseId, studentId, year, semester, grade);
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enrollment added", ButtonType.OK);
+            alert.setHeaderText("Enrollment Updated");
+            alert.showAndWait();
 
         } catch (NumberFormatException e) {
             // Handle parsing errors for courseId and studentId

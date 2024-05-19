@@ -89,4 +89,12 @@ public class EnrollmentFormGenerator {
     public String getSemesterComboBox() {
         return semesterComboBox.getValue();
     }
+
+    public void clearForm() {
+        studentIdField.clear();
+        courseIdField.clear();
+        yearField.clear();
+        gradeComboBox.setValue(null);
+        semesterComboBox.setValue(null);
+    }
 }
