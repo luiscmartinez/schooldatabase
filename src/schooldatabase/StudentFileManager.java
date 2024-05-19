@@ -4,8 +4,13 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
+import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.GenericList;
 import schooldatabase.model.Student;
 
@@ -37,25 +42,32 @@ public class StudentFileManager {
         }
     }
 
-    public boolean addStudent(int id, String firstName, String lastName, String address, String city, String zip,
+    public boolean addStudent(String firstName, String lastName, String address, String city, String zip,
             String state) throws EmptyFieldException, IOException {
-        if (getStudent(id) == null) {
-            if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || city.isEmpty() || state == null
-                    || zip.isEmpty()) {
-                throw new EmptyFieldException("One or More Fields Are Empty");
-            } else {
-                Student stud = new Student(id, firstName, lastName, address, city, state, zip);
-                students.add(stud);
-                try (FileWriter fwriter = new FileWriter(filename, true);
-                        PrintWriter outputFile = new PrintWriter(fwriter)) {
-                    outputFile.println(stud.toString());
-                }
-                System.out.println("Student has been added");
-                return true;
-            }
+        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || city.isEmpty() || state == null
+                || zip.isEmpty()) {
+            throw new EmptyFieldException("One or More Fields Are Empty");
         } else {
-            System.out.println("Student Already Exists");
-            return false;
+
+            String insertSQL = "INSERT INTO students (first_name, last_name, address, city, zipcode, state) VALUES (?, ?, ?, ?, ?, ?);";
+            try (Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                pstmt.setString(1, firstName);
+                pstmt.setString(2, lastName);
+                pstmt.setString(3, address);
+                pstmt.setString(4, city);
+                pstmt.setString(5, zip);
+                pstmt.setString(6, state);
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows > 0) {
+                    System.out.println("A new student was inserted successfully!");
+                }
+            } catch (SQLException e) {
+                System.out.println("Error occurred during data insertion.");
+                e.printStackTrace();
+            }
+            System.out.println("Student has been added");
+            return true;
         }
     }
 

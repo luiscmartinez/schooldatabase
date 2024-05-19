@@ -17,8 +17,6 @@ public class StudentActionHandler {
         System.out.println("Form submitted!");
         System.out.println("First Name: " + newStudentForm.getFirstName());
         System.out.println("Last Name: " + newStudentForm.getLastName());
-        final int studentID = studentFileManager.students.size() + 1;
-        System.out.println("studentID: " + studentID);
         String firstName = newStudentForm.getFirstName();
         String lastName = newStudentForm.getLastName();
         String address = newStudentForm.getAddress();
@@ -26,10 +24,10 @@ public class StudentActionHandler {
         String zipcode = newStudentForm.getZipcode();
         String state = newStudentForm.getState();
         try {
-            if (studentFileManager.addStudent(studentID, firstName, lastName, address, city, zipcode, state)) {
+            if (studentFileManager.addStudent(firstName, lastName, address, city, zipcode, state)) {
                 System.out.println("Student added successfully!");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                        "Student ID: " + studentID + "\nStudent Name: " + firstName + " " + lastName + "\nAddress: "
+                        "Student ID: " + "\nStudent Name: " + firstName + " " + lastName + "\nAddress: "
                                 + address + "\n\t   " + city + ", " + state + " " + zipcode,
                         ButtonType.OK);
                 alert.setHeaderText("Student Added");
