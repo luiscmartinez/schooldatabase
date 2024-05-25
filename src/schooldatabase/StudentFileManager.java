@@ -61,6 +61,7 @@ public class StudentFileManager {
                 int affectedRows = pstmt.executeUpdate();
                 if (affectedRows > 0) {
                     System.out.println("A new student was inserted successfully!");
+                    DatabaseConnection.closeConnection();
                 }
             } catch (SQLException e) {
                 System.out.println("Error occurred during data insertion.");
@@ -72,17 +73,34 @@ public class StudentFileManager {
     }
 
     public Student getStudent(int id) throws EmptyFieldException, IOException {
-        if (id == 0) {
-            throw new EmptyFieldException("Not a Valid ID");
-        } else {
-            for (int i = 0; i < students.size(); i++) {
-                Student current = students.get(i);
-                int ID = current.id;
-                if (ID == id)
-                    return current;
+        String selectSQL = "SELECT * FROM students WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    String firstName = rs.getString("first_name");
+                    String lastName = rs.getString("last_name");
+                    String address = rs.getString("address");
+                    String city = rs.getString("city");
+                    String state = rs.getString("state");
+                    String zip = rs.getString("zipcode");
+                    System.out.println("Student ID: duhhhhh" + firstName + lastName + address + city + state + zip);
+                    rs.close();
+                    pstmt.close();
+                    Student student = new Student(id, firstName, lastName, address, city, state, zip);
+                    DatabaseConnection.closeConnection();
+                    return student;
+                } else {
+                    throw new EmptyFieldException("Not a Valid ID");
+                }
             }
-            return null;
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the search operation.");
+            e.printStackTrace();
+            // return "An error occurred while searching for the user.";
         }
+        return null;
     }
 
     public boolean updateStudent(int id, String firstName, String lastName, String address, String city, String state,
@@ -91,22 +109,26 @@ public class StudentFileManager {
                 || zip.isEmpty()) {
             throw new EmptyFieldException("One or More Fields Are Empty");
         } else {
-            Student stud = getStudent(id);
-            if (stud != null) {
-                stud.setFirstName(firstName);
-                stud.setLastName(lastName);
-                stud.setAddress(address);
-                stud.setCity(city);
-                stud.setState(state);
-                stud.setZip(zip);
-                try (FileWriter fwriter = new FileWriter(filename); PrintWriter outputFile = new PrintWriter(fwriter)) {
-
-                    for (int i = 0; i < students.size(); i++) {
-                        Student s = students.get(i);
-                        outputFile.println(s.toString());
-                    }
+            String updateSQL = "UPDATE students SET first_name = ?, last_name = ?, address = ?, city = ?, state = ?, zipcode = ? WHERE id = ?";
+            try (Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+                pstmt.setString(1, firstName);
+                pstmt.setString(2, lastName);
+                pstmt.setString(3, address);
+                pstmt.setString(4, city);
+                pstmt.setString(5, state);
+                pstmt.setString(6, zip);
+                pstmt.setInt(7, id);
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows > 0) {
+                    System.out.println("A student was updated successfully!");
+                    pstmt.close();
+                    DatabaseConnection.closeConnection();
+                    return true;
                 }
-                return true;
+            } catch (SQLException e) {
+                System.out.println("Error occurred during data update.");
+                e.printStackTrace();
             }
         }
         return false;
