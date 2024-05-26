@@ -41,13 +41,17 @@ public class EditStudentView {
                             student = studentFileManager.getStudent(Integer.parseInt(initialInput.getText()));
                             StudentFormGenerator studentForm = new StudentFormGenerator();
                             // studentForm.createForm();
-                            studentForm.prepopulateForm(student.firstName, student.lastName, student.address,
-                                    student.city,
-                                    student.zip, student.state);
+                            studentForm.prepopulateForm(student);
                             // todo: abstract this into studentActionHandler.handleUpdateStudent(id)
                             studentForm.configureActionButton("Update Student", event -> {
                                 try {
-                                    studentFileManager.updateStudent(student.id, studentForm.getFirstName(),
+
+                                    if (studentForm.getFirstName().isEmpty() || studentForm.getLastName().isEmpty()
+                                            || studentForm.getAddress().isEmpty() || studentForm.getCity().isEmpty()
+                                            || studentForm.getState().isEmpty() || studentForm.getZipcode().isEmpty()) {
+                                        throw new EmptyFieldException("All Fields Must Be Filled Out");
+                                    }
+                                    studentFileManager.updateStudent(student.getId(), studentForm.getFirstName(),
                                             studentForm.getLastName(), studentForm.getAddress(), studentForm.getCity(),
                                             studentForm.getState(), studentForm.getZipcode());
                                     Alert alert = new Alert(Alert.AlertType.INFORMATION, "Student Updated",

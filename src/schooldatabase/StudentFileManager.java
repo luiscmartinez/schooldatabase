@@ -81,7 +81,7 @@ public class StudentFileManager {
 
         for (int i = 0; i < students.size(); i++) {
             Student current = students.get(i);
-            int ID = current.id;
+            int ID = current.getId();
             if (ID == id) {
                 return current;
             }
@@ -118,32 +118,35 @@ public class StudentFileManager {
 
     public boolean updateStudent(int id, String firstName, String lastName, String address, String city, String state,
             String zip) throws IOException, EmptyFieldException {
-        if (firstName.isEmpty() || lastName.isEmpty() || address.isEmpty() || city.isEmpty() || state == null
-                || zip.isEmpty()) {
-            throw new EmptyFieldException("One or More Fields Are Empty");
-        } else {
-            String updateSQL = "UPDATE students SET first_name = ?, last_name = ?, address = ?, city = ?, state = ?, zipcode = ? WHERE id = ?";
-            try (Connection conn = DatabaseConnection.getConnection();
-                    PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
-                pstmt.setString(1, firstName);
-                pstmt.setString(2, lastName);
-                pstmt.setString(3, address);
-                pstmt.setString(4, city);
-                pstmt.setString(5, state);
-                pstmt.setString(6, zip);
-                pstmt.setInt(7, id);
-                int affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    System.out.println("A student was updated successfully!");
-                    pstmt.close();
-                    DatabaseConnection.closeConnection();
-                    return true;
-                }
-            } catch (SQLException e) {
-                System.out.println("Error occurred during data update.");
-                e.printStackTrace();
+        String updateSQL = "UPDATE students SET first_name = ?, last_name = ?, address = ?, city = ?, state = ?, zipcode = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+            pstmt.setString(1, firstName);
+            pstmt.setString(2, lastName);
+            pstmt.setString(3, address);
+            pstmt.setString(4, city);
+            pstmt.setString(5, state);
+            pstmt.setString(6, zip);
+            pstmt.setInt(7, id);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                Student student = getStudent(id);
+                student.setFirstName(firstName);
+                student.setLastName(lastName);
+                student.setAddress(address);
+                student.setCity(city);
+                student.setState(state);
+                student.setZip(zip);
+                System.out.println("A student was updated successfully!");
+                pstmt.close();
+                DatabaseConnection.closeConnection();
+                return true;
             }
+        } catch (SQLException e) {
+            System.out.println("Error occurred during data update.");
+            e.printStackTrace();
         }
+
         return false;
     }
 }

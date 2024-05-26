@@ -1,14 +1,13 @@
 package schooldatabase.model;
 
 public class Student implements Comparable<Student> {
-    public int id;
-    // delete after prepopulating form with student object instead
-    public String firstName;
-    public String lastName;
-    public String address;
-    public String city;
-    public String state;
-    public String zip;
+    int id;
+    String firstName;
+    String lastName;
+    String address;
+    String city;
+    String state;
+    String zip;
 
     // Constructor
     public Student(int id, String firstName, String lastName, String address, String city, String state, String zip) {
@@ -53,6 +52,34 @@ public class Student implements Comparable<Student> {
 
     public void setZip(String zip) {
         this.zip = zip;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public String getLastName() {
+        return this.lastName;
+    }
+
+    public String getAddress() {
+        return this.address;
+    }
+
+    public String getCity() {
+        return this.city;
+    }
+
+    public String getState() {
+        return this.state;
+    }
+
+    public String getZip() {
+        return this.zip;
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     @Override

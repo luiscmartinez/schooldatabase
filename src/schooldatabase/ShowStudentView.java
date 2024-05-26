@@ -33,9 +33,7 @@ public class ShowStudentView {
                         try {
                             student = studentFileManager.getStudent(Integer.parseInt(studentIdInput.getText()));
                             StudentFormGenerator studentForm = new StudentFormGenerator();
-                            studentForm.prepopulateForm(student.firstName, student.lastName, student.address,
-                                    student.city,
-                                    student.zip, student.state);
+                            studentForm.prepopulateForm(student);
                             formPane.add(studentForm.createForm("View Student Read Only Form"), 0, 1);
                         } catch (EmptyFieldException EFE) {
                             Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);

@@ -15,6 +15,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import schooldatabase.client.ZipCodeClient;
+import schooldatabase.model.Student;
 import schooldatabase.model.ZipCode;
 
 public class StudentFormGenerator {
@@ -99,14 +100,13 @@ public class StudentFormGenerator {
         return formPane;
     }
 
-    public void prepopulateForm(String firstName, String lastName, String address, String city, String zipcode,
-            String state) {
-        firstNameField.setText(firstName);
-        lastNameField.setText(lastName);
-        addressField.setText(address);
-        cityField.setText(city);
-        zipcodeField.setText(zipcode);
-        stateComboBox.setValue(state);
+    public void prepopulateForm(Student student) {
+        firstNameField.setText(student.getFirstName());
+        lastNameField.setText(student.getLastName());
+        addressField.setText(student.getAddress());
+        cityField.setText(student.getCity());
+        zipcodeField.setText(student.getZip());
+        stateComboBox.setValue(student.getState());
     }
 
     /**

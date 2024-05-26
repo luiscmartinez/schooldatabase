@@ -1,31 +1,42 @@
 package schooldatabase;
 
+import java.io.IOException;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    static StudentFileManager studentFileManager = new StudentFileManager(
-            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/students.txt");
+        static StudentFileManager studentFileManager;
+        static CourseFileManager courseFileManager;
+        static EnrollmentFileManager enrollmentFileManager;
+        static InstructorFileManager instructorFileManager;
+        static DepartmentFileManager departmentFileManager;
 
-    static CourseFileManager courseFileManager = new CourseFileManager(
-            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/courses.txt");
+        static {
+                try {
+                        studentFileManager = new StudentFileManager();
+                        courseFileManager = new CourseFileManager(
+                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/courses.txt");
+                        enrollmentFileManager = new EnrollmentFileManager(
+                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
+                        instructorFileManager = new InstructorFileManager(
+                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/instructors.txt");
+                        departmentFileManager = new DepartmentFileManager(
+                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/departments.txt");
+                } catch (EmptyFieldException | IOException e) {
+                        // Handle the exceptions here
+                        e.printStackTrace();
+                }
+        }
 
-    static EnrollmentFileManager enrollmentFileManager = new EnrollmentFileManager(
-            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
+        @Override
+        public void start(Stage primaryStage) {
+                new MainView(primaryStage, studentFileManager, courseFileManager, enrollmentFileManager,
+                                instructorFileManager,
+                                departmentFileManager);
+        }
 
-    static InstructorFileManager instructorFileManager = new InstructorFileManager(
-            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/instructors.txt");
-
-    static DepartmentFileManager departmentFileManager = new DepartmentFileManager(
-            "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/departments.txt");
-
-    @Override
-    public void start(Stage primaryStage) {
-        new MainView(primaryStage, studentFileManager, courseFileManager, enrollmentFileManager, instructorFileManager,
-                departmentFileManager);
-    }
-
-    public static void main(String[] args) {
-        launch(args);
-    }
+        public static void main(String[] args) {
+                launch(args);
+        }
 }
