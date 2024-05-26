@@ -6,6 +6,7 @@ import javafx.scene.layout.GridPane;
 import java.util.function.Consumer;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.text.Font;
@@ -19,15 +20,21 @@ public class DepartmentFormGenerator {
         actionButton = new Button();
     }
 
-    public GridPane createFormPane() {
+    public GridPane createForm(String formTitle) {
         GridPane formPane = new GridPane();
 
-        Label titleLabel = new Label("New Department Form");
+        Label titleLabel = new Label(formTitle);
         titleLabel.setFont(new Font("Arial", 18));
+        GridPane.setHalignment(titleLabel, HPos.CENTER);
+        GridPane.setColumnSpan(titleLabel, 2);
         formPane.add(titleLabel, 0, 0);
+        formPane.add(new Label("Department Name:"), 0, 1);
         formPane.add(name, 1, 1);
-
-        formPane.add(actionButton, 1, 2);
+        if (!actionButton.getText().isEmpty()) {
+            formPane.add(actionButton, 1, 2);
+        } else {
+            name.setEditable(false);
+        }
         return formPane;
     }
 

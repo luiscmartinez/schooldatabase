@@ -14,14 +14,12 @@ public class DepartmentActionHandler {
     }
 
     public void handleAddDepartment() {
-        System.out.println("Form submitted!");
-        System.out.println("Department Name: " + newDepartmentForm.getName());
-        final int departmentID = departmentFileManager.departments.size() + 1;
-        System.out.println("departmentID: " + departmentID);
         String name = newDepartmentForm.getName();
         try {
-            if (departmentFileManager.addDepartment(departmentID, name)) {
-                System.out.println("Department added successfully!");
+            if (name.isEmpty()) {
+                throw new EmptyFieldException("Department name cannot be empty!");
+            }
+            if (departmentFileManager.addDepartment(name)) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION,
                         "Department " + name + " added", ButtonType.OK);
                 alert.setHeaderText("Department Added");
@@ -30,6 +28,9 @@ public class DepartmentActionHandler {
             } else {
                 System.out.println("Failed to add department!");
             }
+        } catch (EmptyFieldException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(), ButtonType.OK);
+            alert.showAndWait();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

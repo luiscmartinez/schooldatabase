@@ -15,9 +15,9 @@ public class AddDepartmentView {
         // Initialize and configure the DepartmentFormGenerator
         DepartmentFormGenerator newDepartmentForm = new DepartmentFormGenerator();
         DepartmentActionHandler actionHandler = new DepartmentActionHandler(newDepartmentForm, departmentFileManager);
-        newDepartmentForm.configureActionButton("Add Department", event -> actionHandler.handleAddDepartment());
+        newDepartmentForm.configureActionButton("Add", event -> actionHandler.handleAddDepartment());
 
-        return newDepartmentForm.createFormPane();
+        return newDepartmentForm.createForm("Create Department");
     }
 
     public GridPane getFormPane() {

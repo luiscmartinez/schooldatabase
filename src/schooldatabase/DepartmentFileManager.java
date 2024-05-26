@@ -1,60 +1,103 @@
 package schooldatabase;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import schooldatabase.model.Department;
+import schooldatabase.database.DatabaseConnection;
 
 public class DepartmentFileManager {
     ArrayList<Department> departments = new ArrayList<Department>();
-    String filename;
 
-    DepartmentFileManager(String filename) {
-        try {
-            this.filename = filename;
-            File file = new File(filename);
-            Scanner FileScanner = new Scanner(file); // Create File scanner
-            // Read File line by line
-            if (file.exists()) {
-                while (FileScanner.hasNext()) {
-                    String line = FileScanner.nextLine();// read next line
-                    String[] c = line.split(",");// Split line into a string array
-                    // Asign the element of array to variables
-                    int departmentId = Integer.parseInt(c[0]);
-                    String departmentName = c[1];
-                    // Create department object using variables
-                    Department department = new Department(departmentId, departmentName);
-                    departments.add(department);// Add department Object to array list
-                }
-                FileScanner.close();
+    DepartmentFileManager() {
+        String selectSql = "SELECT * FROM departments;";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSql);
+                ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Department department = new Department(id, name);
+                departments.add(department);
             }
+            rs.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the search operation.");
+            e.printStackTrace();
         } catch (Exception e) {
-            // TODO: handle exception
             System.out.println("Error" + e.getMessage());
+
         }
     }
 
-    public boolean addDepartment(int departmentId, String departmentName) throws IOException {
-        Department department = new Department(departmentId, departmentName);
-        try (FileWriter fwriter = new FileWriter(filename, true);
-                PrintWriter outputFile = new PrintWriter(fwriter)) {
-            outputFile.println(department.toString());
+    public boolean addDepartment(String departmentName) throws IOException {
+        String insertSql = "INSERT INTO departments (name) VALUES (?);";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(insertSql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+            pstmt.setString(1, departmentName);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating Department failed, no rows affected.");
+            }
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    Department department = new Department(generatedKeys.getInt(1), departmentName);
+                    departments.add(department);
+                    DatabaseConnection.closeConnection();
+                    return true;
+                } else {
+                    throw new SQLException("Creating Department failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred during data insertion.");
+            e.printStackTrace();
         }
-        if (getDepartment(departmentId) == null) {
-            departments.add(department);
-            return true;
-        } else {
-            return false;
-        }
+        return false;
     }
 
-    public Department getDepartment(int departmentId) {
+    public Department getDepartment(int departmentId) throws EmptyFieldException, IOException {
+        for (int i = 0; i < departments.size(); i++) {
+            Department current = departments.get(i);
+            int ID = current.getId();
+            if (ID == departmentId) {
+                return current;
+            }
+        }
+        String selectSQL = "SELECT * FROM departments WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
+            pstmt.setInt(1, departmentId);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int id = rs.getInt("id");
+                    String name = rs.getString("name");
+                    Department department = new Department(id, name);
+                    departments.add(department);
+                    DatabaseConnection.closeConnection();
+                    return department;
+                } else {
+                    DatabaseConnection.closeConnection();
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println("Error occurred during select department operation");
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public Department getDepartmentByName(String departmentName) {
         for (Department department : departments) {
-            if (department.getId() == departmentId) {
+            if (department.getName().equals(departmentName)) {
                 return department;
             }
         }
@@ -67,6 +110,33 @@ public class DepartmentFileManager {
             names.add(department.getName());
         }
         return names;
+    }
+
+    public boolean updateDepartment(int id, String name) throws IOException {
+        String updateSQL = "UPDATE departments SET name = ? WHERE id = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+            pstmt.setString(1, name);
+            pstmt.setInt(2, id);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows > 0) {
+                Department department = getDepartment(id);
+                department.setName(name);
+                departments.add(department);
+                return true;
+            } else {
+                throw new SQLException("Creating Student failed, no rows affected");
+            }
+
+        } catch (EmptyFieldException e) {
+            e.notify();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during data update.");
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

@@ -21,8 +21,7 @@ public class Main extends Application {
                                         "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
                         instructorFileManager = new InstructorFileManager(
                                         "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/instructors.txt");
-                        departmentFileManager = new DepartmentFileManager(
-                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/departments.txt");
+                        departmentFileManager = new DepartmentFileManager();
                 } catch (EmptyFieldException | IOException e) {
                         // Handle the exceptions here
                         e.printStackTrace();

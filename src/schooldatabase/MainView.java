@@ -150,7 +150,8 @@ public class MainView {
     }
 
     private void showCourseView(BorderPane root) {
-        ShowCourseView showCourseView = new ShowCourseView(courseFileManager, departmentFileManager);
+        ShowCourseView showCourseView = new ShowCourseView(courseFileManager, departmentFileManager,
+                instructorFileManager);
         root.setCenter(showCourseView.getFormPane());
     }
 
@@ -194,8 +195,7 @@ public class MainView {
     }
 
     private void showEditDepartmentView(BorderPane root) {
-        // EditDepartmentView editDepartmentView = new
-        // EditDepartmentView(departmentFileManager);
-        // root.setCenter(editDepartmentView.getFormPane());
+        EditDepartmentView editDepartmentView = new EditDepartmentView(departmentFileManager);
+        root.setCenter(editDepartmentView.getFormPane());
     }
 }

@@ -35,7 +35,6 @@ public class EditStudentView {
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent e) {
-
                         Student student;
                         try {
                             student = studentFileManager.getStudent(Integer.parseInt(initialInput.getText()));
