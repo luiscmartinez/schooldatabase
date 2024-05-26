@@ -25,22 +25,23 @@ public class InstructorFormGenerator {
                 FXCollections.observableArrayList(departmentNames));
     }
 
-    public GridPane createForm() {
+    public GridPane createForm(String formName) {
         GridPane formPane = new GridPane();
         formPane.setHgap(10);
         formPane.setVgap(10);
-        Label titleLabel = new Label("Add Instructor");
-        titleLabel.setFont(new Font("Arial", 18));
-        GridPane.setHalignment(titleLabel, HPos.CENTER);
-        GridPane.setColumnSpan(titleLabel, 2);
+        Label formTitle = new Label(formName);
+        formTitle.setFont(new Font("Arial", 18));
+        GridPane.setHalignment(formTitle, HPos.CENTER);
+        GridPane.setColumnSpan(formTitle, 2);
+        formPane.add(formTitle, 0, 0);
+        formPane.add(new Label("Instructor Name"), 0, 1);
+        formPane.add(name, 1, 1);
+        formPane.add(new Label("Department"), 0, 2);
+        formPane.add(departmentComboBox, 1, 2);
 
-        formPane.add(new Label("Instructor Name"), 0, 0);
-        formPane.add(name, 1, 0);
-        formPane.add(new Label("Department"), 0, 1);
-        formPane.add(departmentComboBox, 1, 1);
-        actionButton.setText("Add Instructor");
-        formPane.add(actionButton, 1, 2);
-
+        if (!actionButton.getText().isEmpty()) {
+            formPane.add(actionButton, 0, 3);
+        }
         return formPane;
     }
 

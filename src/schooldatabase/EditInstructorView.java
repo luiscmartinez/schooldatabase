@@ -59,7 +59,7 @@ public class EditInstructorView {
                         ex.printStackTrace();
                     }
                 });
-                formPane.add(instructorForm.createForm(), 0, 1);
+                formPane.add(instructorForm.createForm("Edit Instructor Form"), 0, 1);
             } catch (Exception e) {
                 e.printStackTrace();
             }

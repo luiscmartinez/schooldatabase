@@ -22,7 +22,7 @@ public class AddInstructorView {
 
         newInstructorForm.configureActionButton("Add Instructor", event -> actionHandler.handleAddInstructor());
 
-        return newInstructorForm.createForm();
+        return newInstructorForm.createForm("Create Instructor");
     }
 
     public GridPane getFormPane() {
