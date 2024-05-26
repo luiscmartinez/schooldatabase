@@ -2,31 +2,35 @@ package schooldatabase;
 
 import java.util.List;
 import java.util.function.Consumer;
-
+import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
 import schooldatabase.model.Course;
-import javafx.scene.control.Label;
-import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
+import schooldatabase.model.Instructor;
 
 public class CourseFormGenerator {
     private TextField courseNameField;
     private TextField courseDescriptionField;
     private ComboBox<String> departmentComboBox;
-    private ComboBox<String> instructorComboBox;
+    private ComboBox<Instructor> instructorComboBox;
     private Button actionButton;
     private DepartmentFileManager departmentFileManager;
     private InstructorFileManager instructorFileManager;
+    private List<Instructor> instructors;
+    private Instructor selectedInstructor;
 
     public CourseFormGenerator(DepartmentFileManager departmentFileManager,
             InstructorFileManager instructorFileManager) {
         this.departmentFileManager = departmentFileManager;
         this.instructorFileManager = instructorFileManager;
+
         // Initialize form components
         courseNameField = new TextField();
         courseDescriptionField = new TextField();
@@ -36,13 +40,33 @@ public class CourseFormGenerator {
         instructorComboBox = new ComboBox<>();
 
         departmentComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            updateInstructorComboBox(newValue); // This method will handle the updating of professors
+            updateInstructorComboBox(newValue);
         });
 
+        instructorComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
+            selectedInstructor = newValue;
+            System.out.println("Selected instructor: " + (newValue != null ? newValue.getName() : "None"));
+        });
+
+        instructorComboBox.setCellFactory(lv -> new ListCell<Instructor>() {
+            @Override
+            protected void updateItem(Instructor item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item != null ? item.getName() : null);
+            }
+        });
+
+        instructorComboBox.setButtonCell(new ListCell<Instructor>() {
+            @Override
+            protected void updateItem(Instructor item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(item != null ? item.getName() : null);
+            }
+        });
     }
 
-    private void updateInstructorComboBox(String department) {
-        List<String> instructors = instructorFileManager.getInstructorsByDepartment(department);
+    private void updateInstructorComboBox(String departmentName) {
+        instructors = instructorFileManager.getInstructorsByDepartment(departmentName);
         instructorComboBox.setItems(FXCollections.observableArrayList(instructors));
     }
 
@@ -81,7 +105,6 @@ public class CourseFormGenerator {
         actionButton.setOnAction(action::accept);
     }
 
-    // Getter methods
     public String getCourseName() {
         return courseNameField.getText();
     }
@@ -99,15 +122,15 @@ public class CourseFormGenerator {
         courseDescriptionField.clear();
     }
 
-    public String getInstructor() {
-        return instructorComboBox.getValue();
+    public Instructor getInstructor() {
+        return selectedInstructor;
     }
 
     public void prepopulateForm(Course course) {
         courseNameField.setText(course.getName());
         courseDescriptionField.setText(course.getDescription());
         departmentComboBox.setValue(course.getDepartment());
-        instructorComboBox.setValue(course.getInstructor());
+        instructorComboBox.setValue(instructorFileManager.getInstructor(course.getInstructor()));
     }
 
     public String getDepartment() {
