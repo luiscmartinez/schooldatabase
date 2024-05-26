@@ -3,12 +3,12 @@ package schooldatabase.model;
 public class Instructor {
     int id;
     String name;
-    String department;
+    int departmentID;
 
-    public Instructor(int id, String name, String department) {
+    public Instructor(int id, String name, int departmentID) {
         this.id = id;
         this.name = name;
-        this.department = department;
+        this.departmentID = departmentID;
     }
 
     public void setId(int id) {
@@ -19,8 +19,8 @@ public class Instructor {
         this.name = name;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartment(int id) {
+        this.departmentID = id;
     }
 
     public int getId() {
@@ -31,13 +31,13 @@ public class Instructor {
         return this.name;
     }
 
-    public String getDepartment() {
-        return this.department;
+    public int getDepartmentID() {
+        return this.departmentID;
     }
 
     @Override
     public String toString() {
-        return id + "," + name + "," + department;
+        return name;
     }
 
 }

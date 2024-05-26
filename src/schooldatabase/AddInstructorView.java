@@ -15,7 +15,8 @@ public class AddInstructorView {
 
     private GridPane createFormPane() {
         // Initialize and configure the InstructorFormGenerator
-        InstructorFormGenerator newInstructorForm = new InstructorFormGenerator(departmentFileManager);
+        InstructorFormGenerator newInstructorForm = new InstructorFormGenerator(
+                departmentFileManager.getDepartmentNames());
 
         InstructorActionHandler actionHandler = new InstructorActionHandler(newInstructorForm, instructorFileManager);
 

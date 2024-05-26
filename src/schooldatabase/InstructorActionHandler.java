@@ -15,20 +15,28 @@ public class InstructorActionHandler {
 
     public void handleAddInstructor() {
         System.out.println("Form submitted!");
-        System.out.println("Instructor Name: " + newInstructorForm.getName());
-        final int instructorID = instructorFileManager.instructors.size() + 1;
-        System.out.println("instructorID: " + instructorID);
         String name = newInstructorForm.getName();
-        String department = newInstructorForm.getDepartment();
+        String departmentName = newInstructorForm.getDepartment();
+        if (name.isEmpty() || departmentName == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Please fill out all fields", ButtonType.OK);
+            alert.setHeaderText("Error");
+            alert.showAndWait();
+            return;
+        }
         try {
-            if (instructorFileManager.addInstructor(instructorID, name, department)) {
+            // department
+            int departmentID = instructorFileManager.getDepartmentByName(departmentName);
+
+            if (instructorFileManager.addInstructor(name, departmentID)) {
                 System.out.println("Instructor added successfully!");
                 Alert alert = new Alert(Alert.AlertType.INFORMATION,
-                        "Instructor " + name + " from the " + department + " has been added", ButtonType.OK);
+                        "Instructor " + name + " from the " + departmentName + " department has been added",
+                        ButtonType.OK);
                 alert.setHeaderText("Instructor Added");
                 newInstructorForm.clearForm();
                 alert.showAndWait();
             } else {
+
                 System.out.println("Failed to add instructor!");
             }
         } catch (Exception e) {

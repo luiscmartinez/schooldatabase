@@ -1,5 +1,6 @@
 package schooldatabase;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import javafx.collections.FXCollections;
@@ -17,11 +18,11 @@ public class InstructorFormGenerator {
     private ComboBox<String> departmentComboBox;
     private Button actionButton;
 
-    public InstructorFormGenerator(DepartmentFileManager departmentFileManager) {
+    public InstructorFormGenerator(ArrayList<String> departmentNames) {
         name = new TextField();
         actionButton = new Button();
         departmentComboBox = new ComboBox<>(
-                FXCollections.observableArrayList(departmentFileManager.getDepartmentNames()));
+                FXCollections.observableArrayList(departmentNames));
     }
 
     public GridPane createForm() {
@@ -41,6 +42,11 @@ public class InstructorFormGenerator {
         formPane.add(actionButton, 1, 2);
 
         return formPane;
+    }
+
+    public void prepopulateForm(String instructorName, String departmentName) {
+        name.setText(instructorName);
+        departmentComboBox.setValue(departmentName);
     }
 
     public void configureActionButton(String buttonText, Consumer<ActionEvent> action) {

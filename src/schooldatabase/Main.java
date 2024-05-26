@@ -19,8 +19,7 @@ public class Main extends Application {
                                         "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/courses.txt");
                         enrollmentFileManager = new EnrollmentFileManager(
                                         "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
-                        instructorFileManager = new InstructorFileManager(
-                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/instructors.txt");
+                        instructorFileManager = new InstructorFileManager();
                         departmentFileManager = new DepartmentFileManager();
                 } catch (EmptyFieldException | IOException e) {
                         // Handle the exceptions here
