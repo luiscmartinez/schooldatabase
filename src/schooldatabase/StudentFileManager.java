@@ -1,14 +1,10 @@
 package schooldatabase;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
 
 import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.GenericList;
@@ -18,27 +14,28 @@ public class StudentFileManager {
     String filename;
     GenericList<Student> students = new GenericList<>();
 
-    public StudentFileManager(String filename) {
-        this.filename = filename;
-        try {
-            File file = new File(filename);
-            Scanner fileScanner = new Scanner(file);
-            while (fileScanner.hasNext()) {
-                String line = fileScanner.nextLine();
-                String[] s = line.split(",");
-                int sid = Integer.parseInt(s[0]);
-                String firstname = s[1];
-                String lastname = s[2];
-                String address = s[3];
-                String city = s[4];
-                String state = s[5];
-                String zip = s[6];
-                Student stud = new Student(sid, firstname, lastname, address, city, state, zip);
-                students.add(stud);
+    public StudentFileManager() throws EmptyFieldException, IOException {
+        String selectSql = "SELECT * FROM students;";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSql);
+                ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String firstName = rs.getString("first_name");
+                String lastName = rs.getString("last_name");
+                String address = rs.getString("address");
+                String city = rs.getString("city");
+                String state = rs.getString("state");
+                String zip = rs.getString("zipcode");
+                Student student = new Student(id, firstName, lastName, address, city, state, zip);
+                students.add(student);
             }
-            fileScanner.close();
-        } catch (IOException ioe) {
-            System.out.println("Error: " + ioe.getMessage());
+            rs.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the search operation.");
+            e.printStackTrace();
         }
     }
 
@@ -73,6 +70,15 @@ public class StudentFileManager {
     }
 
     public Student getStudent(int id) throws EmptyFieldException, IOException {
+
+        for (int i = 0; i < students.size(); i++) {
+            Student current = students.get(i);
+            int ID = current.id;
+            if (ID == id) {
+                return current;
+            }
+        }
+
         String selectSQL = "SELECT * FROM students WHERE id = ?";
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
@@ -89,6 +95,7 @@ public class StudentFileManager {
                     rs.close();
                     pstmt.close();
                     Student student = new Student(id, firstName, lastName, address, city, state, zip);
+                    students.add(student);
                     DatabaseConnection.closeConnection();
                     return student;
                 } else {
@@ -98,7 +105,6 @@ public class StudentFileManager {
         } catch (SQLException e) {
             System.out.println("Error occurred during the search operation.");
             e.printStackTrace();
-            // return "An error occurred while searching for the user.";
         }
         return null;
     }
