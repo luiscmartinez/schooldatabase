@@ -5,13 +5,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.GenericList;
 import schooldatabase.model.Student;
 
 public class StudentFileManager {
-    String filename;
     GenericList<Student> students = new GenericList<>();
 
     public StudentFileManager() throws EmptyFieldException, IOException {
@@ -48,7 +48,7 @@ public class StudentFileManager {
 
             String insertSQL = "INSERT INTO students (first_name, last_name, address, city, zipcode, state) VALUES (?, ?, ?, ?, ?, ?);";
             try (Connection conn = DatabaseConnection.getConnection();
-                    PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                    PreparedStatement pstmt = conn.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
                 pstmt.setString(1, firstName);
                 pstmt.setString(2, lastName);
                 pstmt.setString(3, address);
@@ -56,9 +56,17 @@ public class StudentFileManager {
                 pstmt.setString(5, zip);
                 pstmt.setString(6, state);
                 int affectedRows = pstmt.executeUpdate();
-                if (affectedRows > 0) {
-                    System.out.println("A new student was inserted successfully!");
-                    DatabaseConnection.closeConnection();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating Student failed, no rows affected");
+                }
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        Student student = new Student(generatedKeys.getInt(1), firstName, lastName, address, city,
+                                state, zip);
+                        students.add(student);
+                    } else {
+                        throw new SQLException("Creating Student failed, no ID obtain");
+                    }
                 }
             } catch (SQLException e) {
                 System.out.println("Error occurred during data insertion.");
@@ -91,7 +99,6 @@ public class StudentFileManager {
                     String city = rs.getString("city");
                     String state = rs.getString("state");
                     String zip = rs.getString("zipcode");
-                    System.out.println("Student ID: duhhhhh" + firstName + lastName + address + city + state + zip);
                     rs.close();
                     pstmt.close();
                     Student student = new Student(id, firstName, lastName, address, city, state, zip);
