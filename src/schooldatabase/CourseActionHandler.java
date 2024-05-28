@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import schooldatabase.model.Course;
 
 public class CourseActionHandler {
     private final CourseFormGenerator courseForm;

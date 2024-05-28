@@ -3,7 +3,6 @@ package schooldatabase;
 import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.Course;
 import schooldatabase.model.GenericList;
-import schooldatabase.model.Instructor;
 
 import java.io.*;
 import java.sql.Connection;

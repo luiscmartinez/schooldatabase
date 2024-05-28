@@ -24,7 +24,6 @@ public class CourseFormGenerator {
     private DepartmentFileManager departmentFileManager;
     private InstructorFileManager instructorFileManager;
     private List<Instructor> instructors;
-    private Instructor selectedInstructor;
 
     public CourseFormGenerator(DepartmentFileManager departmentFileManager,
             InstructorFileManager instructorFileManager) {
@@ -44,7 +43,6 @@ public class CourseFormGenerator {
         });
 
         instructorComboBox.getSelectionModel().selectedItemProperty().addListener((options, oldValue, newValue) -> {
-            selectedInstructor = newValue;
             System.out.println("Selected instructor: " + (newValue != null ? newValue.getName() : "None"));
         });
 
