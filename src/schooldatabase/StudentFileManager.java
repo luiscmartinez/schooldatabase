@@ -64,12 +64,13 @@ public class StudentFileManager {
                         Student student = new Student(generatedKeys.getInt(1), firstName, lastName, address, city,
                                 state, zip);
                         students.add(student);
-                        DatabaseConnection.closeConnection();
                     } else {
-                        DatabaseConnection.closeConnection();
                         throw new SQLException("Creating Student failed, no ID obtain");
                     }
                 }
+                conn.close();
+                pstmt.close();
+                DatabaseConnection.closeConnection();
             } catch (SQLException e) {
                 System.out.println("Error occurred during data insertion.");
                 e.printStackTrace();
