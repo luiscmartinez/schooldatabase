@@ -63,34 +63,13 @@ public class DepartmentFileManager {
         return false;
     }
 
-    public Department getDepartment(int departmentId) throws EmptyFieldException, IOException {
+    public Department getDepartment(int departmentId) {
         for (int i = 0; i < departments.size(); i++) {
             Department current = departments.get(i);
             int ID = current.getId();
             if (ID == departmentId) {
                 return current;
             }
-        }
-        String selectSQL = "SELECT * FROM departments WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-            pstmt.setInt(1, departmentId);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    int id = rs.getInt("id");
-                    String name = rs.getString("name");
-                    Department department = new Department(id, name);
-                    departments.add(department);
-                    DatabaseConnection.closeConnection();
-                    return department;
-                } else {
-                    DatabaseConnection.closeConnection();
-                    return null;
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error occurred during select department operation");
-            e.printStackTrace();
         }
         return null;
     }
@@ -128,12 +107,8 @@ public class DepartmentFileManager {
                 throw new SQLException("Creating Student failed, no rows affected");
             }
 
-        } catch (EmptyFieldException e) {
-            e.notify();
         } catch (SQLException e) {
             System.out.println("Error occurred during data update.");
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return false;

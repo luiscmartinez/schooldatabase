@@ -1,15 +1,15 @@
 package schooldatabase.model;
 
 public class Course implements Comparable<Course> {
-    int courseID;
-    String name, description, department, instructor;
+    int courseID, instructor_id, department_id;
+    String name, description;
 
-    public Course(int courseID, String name, String description, String department, String instructor) {
+    public Course(int courseID, String name, String description, int department_id, int instructor) {
         this.courseID = courseID;
         this.name = name;
         this.description = description;
-        this.department = department;
-        this.instructor = instructor;
+        this.department_id = department_id;
+        this.instructor_id = instructor;
     }
 
     public void setID(int courseID) {
@@ -24,16 +24,16 @@ public class Course implements Comparable<Course> {
         this.description = description;
     }
 
-    public void setDepartment(String department) {
-        this.department = department;
+    public void setDepartmentID(int department) {
+        this.department_id = department;
     }
 
-    public void setInstructor(String instructor) {
-        this.instructor = instructor;
+    public void setInstructor(int instructorID) {
+        this.instructor_id = instructorID;
     }
 
     public String toString() {
-        return courseID + "," + name + "," + description + "," + department + "," + instructor;
+        return courseID + "," + name + "," + description + "," + department_id + "," + instructor_id;
     }
 
     public int getCourseID() {
@@ -48,12 +48,12 @@ public class Course implements Comparable<Course> {
         return description;
     }
 
-    public String getDepartment() {
-        return department;
+    public int getDepartmentID() {
+        return department_id;
     }
 
-    public String getInstructor() {
-        return instructor;
+    public int getInstructor() {
+        return instructor_id;
     }
 
     @Override

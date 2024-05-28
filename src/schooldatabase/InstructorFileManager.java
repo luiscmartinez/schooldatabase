@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 import schooldatabase.database.DatabaseConnection;
@@ -42,7 +43,7 @@ public class InstructorFileManager {
             throws IOException {
         String insertSQL = "INSERT INTO instructors (name, dept_id) VALUES (?, ?);";
         try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(insertSQL)) {
+                PreparedStatement pstmt = conn.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
             // Log the SQL statement being executed
             System.out.println("Executing SQL: " + insertSQL);
             System.out.println("With parameters: name=" + instructorName + ", dept_id=" + departmentID);
@@ -54,7 +55,14 @@ public class InstructorFileManager {
             if (affectedRows == 0) {
                 throw new SQLException("Creating Instructor failed, no rows affected");
             }
-
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    Instructor instructor = new Instructor(generatedKeys.getInt(1), instructorName, departmentID);
+                    instructors.add(instructor);
+                } else {
+                    throw new SQLException("Creating Instructor failed, no ID obtained.");
+                }
+            }
             DatabaseConnection.closeConnection();
             return true; // Return true if the insertion was successful
         } catch (SQLException e) {
@@ -86,8 +94,11 @@ public class InstructorFileManager {
 
     public ArrayList<Instructor> getInstructorsByDepartment(String department) {
         ArrayList<Instructor> instructorsByDepartment = new ArrayList<Instructor>();
+        int departmentID = getDepartmentByName(department);
         for (Instructor instructor : instructors) {
-            instructorsByDepartment.add(instructor);
+            if (instructor.getDepartmentID() == departmentID) {
+                instructorsByDepartment.add(instructor);
+            }
         }
         return instructorsByDepartment;
     }
@@ -105,6 +116,9 @@ public class InstructorFileManager {
                     DatabaseConnection.closeConnection();
                     return departmentID;
                 }
+                rs.close();
+                pstmt.close();
+                DatabaseConnection.closeConnection();
             }
         } catch (SQLException e) {
             System.out.println("Error occurred during the search department by name operation.");

@@ -18,13 +18,22 @@ public class CourseActionHandler {
     public void handleAddCourse() {
         String courseName = courseForm.getCourseNameField().getText();
         String courseDescription = courseForm.getCourseDescriptionField();
-        final int courseID = courseFileManager.courses.size() + 1;
-        Course newCourse = new Course(courseID, courseName, courseDescription, courseForm.getDepartment(),
-                courseForm.getInstructor());
         try {
-            if (courseFileManager.addCourse(newCourse)) {
+            if (courseName.isEmpty() || courseDescription.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "One or More Fields Are Empty", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+            int departmentID = courseForm.getInstructor().getDepartmentID();
+            int instructorID = courseForm.getInstructor().getId();
+            System.out.println("course Description: " + courseForm.getCourseDescriptionField()
+                    + " course departmentID : " + courseForm.getDepartment());
+
+            if (courseFileManager.addCourse(courseName, courseDescription, departmentID, instructorID)) {
                 System.out.println("Course added successfully!");
-                Alert alert = new Alert(Alert.AlertType.NONE, "Course ID: " + courseID + "\nCourse Name: " + courseName
+
+                Alert alert = new Alert(Alert.AlertType.NONE, "Course ID: " +
+                        "\nCourse Name: " + courseName
                         + "\nCourse Description: " + courseDescription, ButtonType.OK);
                 alert.setHeaderText("Course Was Added");
                 alert.showAndWait();

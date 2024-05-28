@@ -15,8 +15,7 @@ public class Main extends Application {
         static {
                 try {
                         studentFileManager = new StudentFileManager();
-                        courseFileManager = new CourseFileManager(
-                                        "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/courses.txt");
+                        courseFileManager = new CourseFileManager();
                         enrollmentFileManager = new EnrollmentFileManager(
                                         "/Users/million/codez/cs-213-advanced-java/schooldatabase/src/schooldatabase/enrollments.txt");
                         instructorFileManager = new InstructorFileManager();

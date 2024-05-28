@@ -1,41 +1,42 @@
 package schooldatabase;
 
-import java.util.Scanner;
-
+import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.Course;
 import schooldatabase.model.GenericList;
+import schooldatabase.model.Instructor;
 
 import java.io.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 class CourseFileManager {
     GenericList<Course> courses = new GenericList<Course>();
     String filename;
 
     // Constructor
-    CourseFileManager(String filename) {
-        try {
-            this.filename = filename;
-            File file = new File(filename);
-            Scanner FileScanner = new Scanner(file); // Create File scanner
-            // Read File line by line
-            if (file.exists()) {
-                while (FileScanner.hasNext()) {
-                    String line = FileScanner.nextLine();// read next line
-                    String[] c = line.split(",");// Split line into a string array
-                    // Asign the element of array to variables
-                    int courseId = Integer.parseInt(c[0]);
-                    String courseName = c[1];
-                    String courseDescription = c[2];
-                    String departmentName = c[3];
-                    String instructorName = c[4];
-                    // Create course object using variables
-                    Course course = new Course(courseId, courseName, courseDescription, departmentName, instructorName);
-                    courses.add(course);// Add course Object to array list
-                }
-                FileScanner.close();
+    CourseFileManager() {
+        String selectSql = "SELECT * FROM courses;";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSql);
+                ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                String description = rs.getString("description");
+                int department_id = rs.getInt("department_id");
+                int instructor_id = rs.getInt("instructor_id");
+                Course course = new Course(id, name, description, department_id, instructor_id);
+                courses.add(course);
             }
-        } catch (IOException e) {
-            System.out.println("Error: " + e.getMessage());
+            rs.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the search operation.");
+            e.printStackTrace();
         }
     }
 
@@ -52,66 +53,70 @@ class CourseFileManager {
             }
         }
         return null;
-
     }
 
-    boolean addCourse(Course course) throws EmptyFieldException, IOException {
-        // If course does not exist collect info, create new course object and add to
-        // arraylist and return true
-        int CID = course.getCourseID();
-        String courseName = course.getName();
-        String courseDescrip = course.getDescription();
-        String courseDepartmentName = course.getDepartment();
-
-        if (getCourse(CID) == null) {// Call getCourse method to find if course exis
-            if (courseName.equals("") || courseDescrip.equals("")) {
-                throw new EmptyFieldException("Course ID Field is Blank");
-            } else {
-                courses.add(course);
-
-                // Append the new course object to the file
-                FileWriter fwriter = new FileWriter(filename, true);
-                PrintWriter outputFile = new PrintWriter(fwriter);
-                outputFile.println(CID + "," + courseName + "," + courseDescrip + "," + courseDepartmentName + ","
-                        + course.getInstructor());
-                outputFile.close();
-
-                System.out.println("Course has been added");// Confirmation Statement
-                return true;
+    boolean addCourse(String courseName, String description, int departmentID, int instructorID)
+            throws EmptyFieldException, IOException {
+        String insertSql = "INSERT INTO courses (name, description, department_id, instructor_id) VALUES (?, ?, ?, ?);";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(insertSql, Statement.RETURN_GENERATED_KEYS);) {
+            pstmt.setString(1, courseName);
+            pstmt.setString(2, description);
+            pstmt.setInt(3, departmentID);
+            pstmt.setInt(4, instructorID);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating Course failed, no rows affected");
             }
-        } else {// If the course already exist then display an error message and return false
-            System.out.println("Course Already Exists");
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    Course course = new Course(generatedKeys.getInt(1), courseName, description, departmentID,
+                            instructorID);
+                    courses.add(course);
+                } else {
+                    throw new SQLException("Creating Course failed, no ID obtained.");
+                }
+            }
+            conn.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the insert operation.");
+            e.printStackTrace();
             return false;
         }
+        return true;
     }
 
-    boolean updateCourse(int cid, String courName, String courseDescription, String courseDepartment,
-            String courseInstructor)
+    boolean updateCourse(int cid, String courName, String courseDescription, int departmentID,
+            int instructor)
             throws IOException, EmptyFieldException {
-        // Check if course exists, if it does then update the course object and return
-        // true
-        if (getCourse(cid) != null) {
-            Course cour = getCourse(cid);
-            cour.setID(cid);
-            cour.setName(courName);
-            cour.setDescription(courseDescription);
-            cour.setDepartment(courseDepartment);
-            cour.setInstructor(courseInstructor);
-            // print every course in Arraylist in a wiped fi;e
-            FileWriter fwriter = new FileWriter(filename);
-            PrintWriter outputFile = new PrintWriter(fwriter);
-            for (int i = 0; i < courses.size(); i++) {
-                outputFile.println(
-                        courses.get(i).getCourseID() + "," + courses.get(i).getName() + ","
-                                + courses.get(i).getDescription() + "," + courses.get(i).getDepartment() + ","
-                                + courses.get(i).getInstructor());
+        String updateSQL = "UPDATE courses SET name = ?, description = ?, department_id = ?, instructor_id = ? WHERE id = ?;";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(updateSQL);) {
+            pstmt.setString(1, courName);
+            pstmt.setString(2, courseDescription);
+            pstmt.setInt(3, departmentID);
+            pstmt.setInt(4, instructor);
+            pstmt.setInt(5, cid);
+            int affectedRows = pstmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Updating Course failed, no rows affected");
+            } else {
+                Course course = getCourse(cid);
+                course.setName(courName);
+                course.setDescription(courseDescription);
+                course.setDepartmentID(departmentID);
+                course.setInstructor(instructor);
             }
-            outputFile.close();
-            System.out.println("Course Has Been Updated");
-            return true;
+            conn.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the update operation.");
+            e.printStackTrace();
+            return false;
         }
-        // if the course does not exist then display an error message and return false
-        System.out.println("Course Does Not Exist");
-        return false;
+        return true;
     }
 }

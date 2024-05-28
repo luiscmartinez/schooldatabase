@@ -95,6 +95,8 @@ public class CourseFormGenerator {
         } else {
             courseDescriptionField.setEditable(false);
             courseNameField.setEditable(false);
+            departmentComboBox.setDisable(true);
+            instructorComboBox.setDisable(true);
         }
 
         return formPane;
@@ -120,16 +122,19 @@ public class CourseFormGenerator {
     public void clearForm() {
         courseNameField.clear();
         courseDescriptionField.clear();
+        departmentComboBox.getSelectionModel().clearSelection();
+        instructorComboBox.getSelectionModel().clearSelection();
     }
 
     public Instructor getInstructor() {
-        return selectedInstructor;
+        return instructorComboBox.getValue();
     }
 
     public void prepopulateForm(Course course) {
         courseNameField.setText(course.getName());
         courseDescriptionField.setText(course.getDescription());
-        departmentComboBox.setValue(course.getDepartment());
+        String departmentName = departmentFileManager.getDepartment(course.getDepartmentID()).getName();
+        departmentComboBox.setValue(departmentName);
         instructorComboBox.setValue(instructorFileManager.getInstructor(course.getInstructor()));
     }
 

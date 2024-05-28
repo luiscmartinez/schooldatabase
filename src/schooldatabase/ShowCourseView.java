@@ -17,7 +17,8 @@ public class ShowCourseView {
     private InstructorFileManager instructorFileManager;
     private GridPane formPane;
 
-    public ShowCourseView(CourseFileManager courseFileManager, DepartmentFileManager departmentFileManager) {
+    public ShowCourseView(CourseFileManager courseFileManager, DepartmentFileManager departmentFileManager,
+            InstructorFileManager instructorFileManager) {
         this.courseFileManager = courseFileManager;
         this.departmentFileManager = departmentFileManager;
         this.instructorFileManager = instructorFileManager;
@@ -36,6 +37,11 @@ public class ShowCourseView {
                         Course course;
                         try {
                             course = courseFileManager.getCourse(Integer.parseInt(courseIdInput.getText()));
+                            if (course == null) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, "Course Not Found", ButtonType.OK);
+                                alert.showAndWait();
+                                return;
+                            }
                             CourseFormGenerator courseForm = new CourseFormGenerator(departmentFileManager,
                                     instructorFileManager);
                             courseForm.prepopulateForm(course);

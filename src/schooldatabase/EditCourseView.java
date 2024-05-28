@@ -41,16 +41,21 @@ public class EditCourseView {
                 editCourseForm.prepopulateForm(course);
                 editCourseForm.configureActionButton("Update Course", e -> {
                     try {
-                        courseFileManager.updateCourse(course.getCourseID(), editCourseForm.getCourseName(),
-                                editCourseForm.getCourseDescriptionField(), editCourseForm.getDepartment(),
-                                editCourseForm.getInstructor());
+                        int instructor_id = editCourseForm.getInstructor().getId();
+                        int department_id = editCourseForm.getInstructor().getDepartmentID();
+                        courseFileManager.updateCourse(course.getCourseID(),
+                                editCourseForm.getCourseName(),
+                                editCourseForm.getCourseDescriptionField(), department_id, instructor_id);
+
                         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Course Updated", ButtonType.OK);
                         alert.showAndWait();
                     } catch (IOException IOE) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, IOE.getMessage(), ButtonType.OK);
+                        Alert alert = new Alert(Alert.AlertType.ERROR, IOE.getMessage(),
+                                ButtonType.OK);
                         alert.showAndWait();
                     } catch (EmptyFieldException EFE) {
-                        Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
+                        Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(),
+                                ButtonType.OK);
                         alert.showAndWait();
                     }
                 });
