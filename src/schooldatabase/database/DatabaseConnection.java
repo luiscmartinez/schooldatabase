@@ -6,12 +6,6 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
     private static Connection connection = null;
-    private final static String URL = "jdbc:postgresql://localhost/million";
-    // private final static String URL =
-    // "jdbc:postgresql://ec2-3-221-177-27.compute-1.amazonaws.com:5432/d76soo9vsp11us";
-    // static String username = "qmvxoxndwomhft";
-    // static String password =
-    // "2a8705453f1db32195e33e794c6d92676092eef84fbfd5065911757eebd7bf54";
 
     private DatabaseConnection() {
         // Private constructor to prevent instantiation
@@ -20,11 +14,18 @@ public class DatabaseConnection {
     public static Connection getConnection() {
         if (connection == null) {
             try {
-                Class.forName("org.postgresql.Driver");
-                // connection = DriverManager.getConnection(URL, username, password);
+                // Use the ConfigReader to read configuration
+                ConfigReader configReader = new ConfigReader("app.config");
 
-                connection = DriverManager.getConnection(URL);
-                // connection = DriverManager.getConnection(URL);
+                String url = configReader.getUrl();
+                String username = configReader.getUsername();
+                String password = configReader.getPassword();
+
+                // Load the database driver
+                Class.forName("org.postgresql.Driver");
+                // Establish the connection
+                connection = DriverManager.getConnection(url, username, password);
+
                 System.out.println("Database connection successfully established.");
             } catch (ClassNotFoundException | SQLException e) {
                 System.out.println("Database connection failed.");
