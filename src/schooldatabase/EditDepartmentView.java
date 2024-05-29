@@ -38,6 +38,12 @@ public class EditDepartmentView {
                 departmentForm.prepopulateForm(department.getName());
                 departmentForm.configureActionButton("Update Department", e -> {
                     try {
+                        if (departmentForm.getName().isEmpty()) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "Department Name Must Be Filled Out",
+                                    ButtonType.OK);
+                            alert.showAndWait();
+                            return;
+                        }
                         departmentFileManager.updateDepartment(departmentId, departmentForm.getName());
                         Alert alert = new Alert(Alert.AlertType.INFORMATION, "Department Updated", ButtonType.OK);
                         alert.showAndWait();
