@@ -46,7 +46,18 @@ public class EditEnrollmentView {
                                         enrollmentFileManager, studentFileManager, courseFileManager);
 
                                 enrollmentForm.configureActionButton("Update Enrollment",
-                                        event -> actionHandler.handleUpdateEnrollment(enrollmentId));
+                                        event -> {
+                                            try {
+                                                actionHandler.handleUpdateEnrollment(enrollmentId);
+                                                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                                                        "Enrollment updated successfully", ButtonType.OK);
+                                                alert.showAndWait();
+                                            } catch (Exception exc) {
+                                                Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(),
+                                                        ButtonType.OK);
+                                                alert.showAndWait();
+                                            }
+                                        });
                                 formPane.add(enrollmentForm.createFormPane("Edit Enrollment Form"), 0, 1);
                             } else {
                                 Alert alert = new Alert(Alert.AlertType.ERROR, "Enrollment was not Found",
