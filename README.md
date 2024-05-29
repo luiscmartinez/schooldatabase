@@ -1,10 +1,15 @@
 # PreRequisites
 
-Create 3 txt files inside of src/databases
-
-- enrollments.txt
-- students.txt
-- courses.txt
+Create an `app.config` file and add the following:
+```
+<configuration>
+    <database>
+        <url>jdbc:postgresql://[host]/[DB_NAME]</url>
+        <username>[username]</username>
+        <password>[password]</password>
+    </database>
+</configuration>
+```
 
 Required libs: JavaFx and gson
 
