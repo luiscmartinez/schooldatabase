@@ -92,6 +92,12 @@ public class GenerateReportView {
 
                     int courseID = Integer.parseInt(courseIDText);
 
+                    if (courseFileManager.getCourse(courseID) == null) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR, "Course ID does not exist.", ButtonType.OK);
+                        alert.showAndWait();
+                        return;
+                    }
+
                     ArrayList<Enrollment> enrollments = enrollmentFileManager.getEnrollments(courseID, yearText,
                             semesterText);
                     ObservableList<ReportEntry> reportEntries = FXCollections.observableArrayList();
@@ -107,6 +113,11 @@ public class GenerateReportView {
                         ReportEntry entry = new ReportEntry(courseIDVal, studentID, studentName, semester, yearVal,
                                 grade);
                         reportEntries.add(entry);
+                    }
+                    if (reportEntries.isEmpty()) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION, "No enrollments found.", ButtonType.OK);
+                        alert.showAndWait();
+                        return;
                     }
 
                     tableView.setItems(reportEntries); // Update table items
