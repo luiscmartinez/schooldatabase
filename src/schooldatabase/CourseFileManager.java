@@ -39,10 +39,9 @@ class CourseFileManager {
         }
     }
 
-    Course getCourse(int cid) throws EmptyFieldException, IOException {
-        // try{
+    Course getCourse(int cid) {
         if (cid == 0) {
-            throw new EmptyFieldException("Invalid Course ID");
+            return null;
         } else {
             for (int i = 0; i < courses.size(); i++) {
                 Course current = courses.get(i);

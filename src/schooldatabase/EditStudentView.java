@@ -36,52 +36,46 @@ public class EditStudentView {
                     @Override
                     public void handle(ActionEvent e) {
                         Student student;
-                        try {
-                            student = studentFileManager.getStudent(Integer.parseInt(initialInput.getText()));
-                            StudentFormGenerator studentForm = new StudentFormGenerator();
-                            // studentForm.createForm();
-                            studentForm.prepopulateForm(student);
-                            // todo: abstract this into studentActionHandler.handleUpdateStudent(id)
-                            studentForm.configureActionButton("Update Student", event -> {
-                                try {
-
-                                    if (studentForm.getFirstName().isEmpty() || studentForm.getLastName().isEmpty()
-                                            || studentForm.getAddress().isEmpty() || studentForm.getCity().isEmpty()
-                                            || studentForm.getState().isEmpty() || studentForm.getZipcode().isEmpty()) {
-                                        throw new EmptyFieldException("All Fields Must Be Filled Out");
-                                    }
-                                    studentFileManager.updateStudent(student.getId(), studentForm.getFirstName(),
-                                            studentForm.getLastName(), studentForm.getAddress(), studentForm.getCity(),
-                                            studentForm.getState(), studentForm.getZipcode());
-                                    Alert alert = new Alert(Alert.AlertType.INFORMATION, "Student Updated",
-                                            ButtonType.OK);
-                                    alert.showAndWait();
-                                } catch (IOException IOE) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR, IOE.getMessage(), ButtonType.OK);
-                                    alert.showAndWait();
-                                } catch (EmptyFieldException EFE) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
-                                    alert.showAndWait();
-                                } catch (NumberFormatException NFE) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR, "ID Field was Left Blank",
-                                            ButtonType.OK);
-                                    alert.showAndWait();
-                                } catch (Exception exc) {
-                                    Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(), ButtonType.OK);
-                                    alert.showAndWait();
-                                }
-                            });
-                            formPane.add(studentForm.createForm("Edit Student Form"), 0, 1);
-                        } catch (EmptyFieldException EFE) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
+                        student = studentFileManager.getStudent(Integer.parseInt(initialInput.getText()));
+                        if (student == null) {
+                            Alert alert = new Alert(Alert.AlertType.ERROR, "Student was not Found", ButtonType.OK);
                             alert.showAndWait();
-                        } catch (NumberFormatException NFE) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, "ID Field was Left Blank", ButtonType.OK);
-                            alert.showAndWait();
-                        } catch (Exception exc) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(), ButtonType.OK);
-                            alert.showAndWait();
+                            return;
                         }
+                        StudentFormGenerator studentForm = new StudentFormGenerator();
+                        // studentForm.createForm();
+                        studentForm.prepopulateForm(student);
+                        // todo: abstract this into studentActionHandler.handleUpdateStudent(id)
+                        studentForm.configureActionButton("Update Student", event -> {
+                            try {
+
+                                if (studentForm.getFirstName().isEmpty() || studentForm.getLastName().isEmpty()
+                                        || studentForm.getAddress().isEmpty() || studentForm.getCity().isEmpty()
+                                        || studentForm.getState().isEmpty() || studentForm.getZipcode().isEmpty()) {
+                                    throw new EmptyFieldException("All Fields Must Be Filled Out");
+                                }
+                                studentFileManager.updateStudent(student.getId(), studentForm.getFirstName(),
+                                        studentForm.getLastName(), studentForm.getAddress(), studentForm.getCity(),
+                                        studentForm.getState(), studentForm.getZipcode());
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION, "Student Updated",
+                                        ButtonType.OK);
+                                alert.showAndWait();
+                            } catch (IOException IOE) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, IOE.getMessage(), ButtonType.OK);
+                                alert.showAndWait();
+                            } catch (EmptyFieldException EFE) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
+                                alert.showAndWait();
+                            } catch (NumberFormatException NFE) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, "ID Field was Left Blank",
+                                        ButtonType.OK);
+                                alert.showAndWait();
+                            } catch (Exception exc) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(), ButtonType.OK);
+                                alert.showAndWait();
+                            }
+                        });
+                        formPane.add(studentForm.createForm("Edit Student Form"), 0, 1);
 
                     }
                 });

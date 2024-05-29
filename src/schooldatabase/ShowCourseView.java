@@ -46,9 +46,6 @@ public class ShowCourseView {
                                     instructorFileManager);
                             courseForm.prepopulateForm(course);
                             formPane.add(courseForm.createForm("View Course Read Only Form"), 0, 1);
-                        } catch (EmptyFieldException EFE) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
-                            alert.showAndWait();
                         } catch (NumberFormatException NFE) {
                             Alert alert = new Alert(Alert.AlertType.ERROR, "ID Field was Left Blank", ButtonType.OK);
                             alert.showAndWait();

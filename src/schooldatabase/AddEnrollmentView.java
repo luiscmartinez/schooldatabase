@@ -1,8 +1,9 @@
 package schooldatabase;
 
-import java.io.IOException;
-
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
+import schooldatabase.model.Course;
 import schooldatabase.model.Student;
 
 public class AddEnrollmentView {
@@ -27,20 +28,34 @@ public class AddEnrollmentView {
 
         newEnrollmentForm.configureActionButton("submit enrollment", event -> actionHandler.handleAddEnrollment());
 
-        newEnrollmentForm.configureSearchButton(event -> {
+        newEnrollmentForm.configureStudentSearchButton(event -> {
             int studentId = Integer.parseInt(newEnrollmentForm.getStudentIdField().getText());
             Student student;
-            try {
-                student = studentFileManager.getStudent(studentId);
+            student = studentFileManager.getStudent(studentId);
+            if (student == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Student was not Found",
+                        ButtonType.OK);
+                alert.showAndWait();
+            } else {
                 String studentFullName = student.getFirstName() + " " + student.getLastName();
                 newEnrollmentForm.setStudentNameField(studentFullName);
-            } catch (EmptyFieldException e) {
-                // ! TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
+        });
+
+        newEnrollmentForm.configureCourseSearchButton(event -> {
+            int courseId = Integer.parseInt(newEnrollmentForm.getCourseIdField().getText());
+            Course course;
+            course = courseFileManager.getCourse(courseId);
+            if (course == null) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "Enrollment was not Found",
+                        ButtonType.OK);
+                alert.showAndWait();
+
+            } else {
+                String courseName = course.getName();
+                newEnrollmentForm.setCourseNameField(courseName);
+            }
+
         });
 
         return newEnrollmentForm.createFormPane("Add Enrollment Form");

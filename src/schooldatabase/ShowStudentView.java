@@ -32,12 +32,14 @@ public class ShowStudentView {
                         Student student;
                         try {
                             student = studentFileManager.getStudent(Integer.parseInt(studentIdInput.getText()));
+                            if (student == null) {
+                                Alert alert = new Alert(Alert.AlertType.ERROR, "Student was not Found", ButtonType.OK);
+                                alert.showAndWait();
+                                return;
+                            }
                             StudentFormGenerator studentForm = new StudentFormGenerator();
                             studentForm.prepopulateForm(student);
                             formPane.add(studentForm.createForm("View Student Read Only Form"), 0, 1);
-                        } catch (EmptyFieldException EFE) {
-                            Alert alert = new Alert(Alert.AlertType.ERROR, EFE.getMessage(), ButtonType.OK);
-                            alert.showAndWait();
                         } catch (NumberFormatException NFE) {
                             Alert alert = new Alert(Alert.AlertType.ERROR, "ID Field was Left Blank", ButtonType.OK);
                             alert.showAndWait();

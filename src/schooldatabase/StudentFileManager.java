@@ -80,7 +80,10 @@ public class StudentFileManager {
         }
     }
 
-    public Student getStudent(int id) throws EmptyFieldException, IOException {
+    public Student getStudent(int id) {
+        if (id == 0) {
+            return null;
+        }
         for (int i = 0; i < students.size(); i++) {
             Student current = students.get(i);
             int ID = current.getId();

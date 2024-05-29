@@ -18,8 +18,10 @@ public class EnrollmentFormGenerator {
     private ComboBox<Character> gradeComboBox;
     private ComboBox<String> semesterComboBox;
     private Button actionButton;
-    private Button searchButton;
-    private TextField studentNameField; // New field to display student name
+    private Button studentSearchButton;
+    private Button courseSearchButton;
+    private TextField studentNameField; // Field to display student name
+    private TextField courseNameField; // Field to display course name
 
     public EnrollmentFormGenerator() {
         this.studentIdField = new TextField();
@@ -29,9 +31,12 @@ public class EnrollmentFormGenerator {
         gradeComboBox.getItems().addAll('A', 'B', 'C', 'D', 'F');
         semesterComboBox = new ComboBox<>(FXCollections.observableArrayList("Fall", "Spring", "Summer", "Winter"));
         actionButton = new Button();
-        searchButton = new Button("Search");
-        studentNameField = new TextField(); // Initialize the new text field
+        studentSearchButton = new Button("Search Student");
+        courseSearchButton = new Button("Search Course");
+        studentNameField = new TextField(); // Initialize the text field for student name
         studentNameField.setEditable(false); // Make it read-only
+        courseNameField = new TextField(); // Initialize the text field for course name
+        courseNameField.setEditable(false); // Make it read-only
     }
 
     public GridPane createFormPane(String formTitle) {
@@ -42,9 +47,10 @@ public class EnrollmentFormGenerator {
         formPane.add(titleLabel, 0, 0);
         formPane.add(new Label("Student ID:"), 0, 1);
         formPane.add(studentIdField, 1, 1);
-        formPane.add(searchButton, 2, 1); // Add the search button next to the studentIdField
+        formPane.add(studentSearchButton, 2, 1); // Add the search button next to the studentIdField
         formPane.add(new Label("Course ID:"), 0, 2);
         formPane.add(courseIdField, 1, 2);
+        formPane.add(courseSearchButton, 2, 2); // Add the search button next to the courseIdField
         formPane.add(new Label("Year:"), 0, 3);
         formPane.add(yearField, 1, 3);
         formPane.add(new Label("Grade:"), 0, 4);
@@ -62,6 +68,8 @@ public class EnrollmentFormGenerator {
         }
         formPane.add(new Label("Student Name:"), 0, 7); // Add label for student name
         formPane.add(studentNameField, 1, 7); // Add the studentNameField below the studentIdField
+        formPane.add(new Label("Course Name:"), 0, 8); // Add label for course name
+        formPane.add(courseNameField, 1, 8); // Add the courseNameField below the courseIdField
         return formPane;
     }
 
@@ -78,8 +86,12 @@ public class EnrollmentFormGenerator {
         actionButton.setOnAction(action::accept);
     }
 
-    public void configureSearchButton(Consumer<ActionEvent> searchAction) {
-        searchButton.setOnAction(searchAction::accept);
+    public void configureStudentSearchButton(Consumer<ActionEvent> searchAction) {
+        studentSearchButton.setOnAction(searchAction::accept);
+    }
+
+    public void configureCourseSearchButton(Consumer<ActionEvent> searchAction) {
+        courseSearchButton.setOnAction(searchAction::accept);
     }
 
     public TextField getStudentIdField() {
@@ -108,10 +120,15 @@ public class EnrollmentFormGenerator {
         yearField.clear();
         gradeComboBox.setValue(null);
         semesterComboBox.setValue(null);
-        studentNameField.clear(); // Clear the student name field as well
+        studentNameField.clear(); // Clear the student name field
+        courseNameField.clear(); // Clear the course name field
     }
 
     public void setStudentNameField(String studentName) {
-        studentNameField.setText(studentName); // Set the student name in the new text field
+        studentNameField.setText(studentName); // Set the student name in the text field
+    }
+
+    public void setCourseNameField(String courseName) {
+        courseNameField.setText(courseName); // Set the course name in the text field
     }
 }
