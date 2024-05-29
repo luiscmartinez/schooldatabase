@@ -44,6 +44,14 @@ public class EditCourseView {
             editCourseForm.prepopulateForm(course);
             editCourseForm.configureActionButton("Update Course", e -> {
                 try {
+                    if (editCourseForm.getCourseName().isEmpty()
+                            || editCourseForm.getCourseDescriptionField().isEmpty()) {
+                        throw new EmptyFieldException("All Fields Must Be Filled Out");
+                    }
+                    if (editCourseForm.getInstructor() == null) {
+                        throw new EmptyFieldException("Instructor Must Be Selected");
+                    }
+
                     int instructor_id = editCourseForm.getInstructor().getId();
                     int department_id = editCourseForm.getInstructor().getDepartmentID();
                     courseFileManager.updateCourse(course.getCourseID(),

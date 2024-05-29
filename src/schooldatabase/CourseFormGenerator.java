@@ -125,6 +125,9 @@ public class CourseFormGenerator {
     }
 
     public Instructor getInstructor() {
+        if (instructorComboBox == null) {
+            return null;
+        }
         return instructorComboBox.getValue();
     }
 
