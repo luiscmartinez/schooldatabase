@@ -40,6 +40,7 @@ public class GenerateReportView {
         this.formPane = createFormPane();
     }
 
+    @SuppressWarnings("unchecked")
     private VBox createFormPane() {
         Label reportTitle = new Label("Report");
         Label courseIDLabel = new Label("Course ID: ");

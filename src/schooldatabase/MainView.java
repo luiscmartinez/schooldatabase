@@ -85,6 +85,10 @@ public class MainView {
             showEditInstructorView(root);
         });
 
+        MenuItem viewInstructor = MenuFactory.createMenuItem("View Instructor", () -> {
+            ShowInstructorView(root);
+        });
+
         // Department Menu
         Menu departmentMenu = MenuFactory.createMenu("Department");
         MenuItem addDepartment = MenuFactory.createMenuItem("Add Department", () -> {
@@ -97,7 +101,7 @@ public class MainView {
 
         MenuFactory.addItemsToMenu(departmentMenu, Arrays.asList(addDepartment, editDepartment));
 
-        MenuFactory.addItemsToMenu(instructorMenu, Arrays.asList(addInstructor, editInstructor));
+        MenuFactory.addItemsToMenu(instructorMenu, Arrays.asList(addInstructor, editInstructor, viewInstructor));
 
         MenuFactory.addItemsToMenu(courseMenu, Arrays.asList(addCourse, viewCourse, editCourse));
 
@@ -212,4 +216,8 @@ public class MainView {
         root.setCenter(generateReportView.getFormPane());
     }
 
+    private void ShowInstructorView(BorderPane root) {
+        ShowInstructorView showInstructorView = new ShowInstructorView(instructorFileManager, departmentFileManager);
+        root.setCenter(showInstructorView.getFormPane());
+    }
 }

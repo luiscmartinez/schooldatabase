@@ -25,6 +25,14 @@ public class InstructorFormGenerator {
                 FXCollections.observableArrayList(departmentNames));
     }
 
+    public InstructorFormGenerator() {
+        name = new TextField();
+        actionButton = new Button();
+        departmentComboBox = new ComboBox<>();
+        departmentComboBox.setEditable(false);
+        name.setEditable(false);
+    }
+
     public GridPane createForm(String formName) {
         GridPane formPane = new GridPane();
         formPane.setHgap(10);
