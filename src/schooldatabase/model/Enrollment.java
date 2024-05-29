@@ -1,40 +1,40 @@
 package schooldatabase.model;
 
 public class Enrollment implements Comparable<Enrollment> {
-    int SID, CID, EID;
+    int student_id, course_id, id;
     String year, semester;
     char grade;
 
-    public Enrollment(int EID, int CID, int SID, String year, String semester, char grade) {
-        this.SID = SID;
-        this.CID = CID;
-        this.EID = EID;
+    public Enrollment(int id, int course_id, int student_id, String year, String semester, char grade) {
+        this.student_id = student_id;
+        this.course_id = course_id;
+        this.id = id;
         this.year = year;
         this.semester = semester;
         this.grade = grade;
     }
 
-    void setCID(int CID) {
-        this.CID = CID;
+    public void setCourseID(int course_id) {
+        this.course_id = course_id;
     }
 
-    void setSID(int SID) {
-        this.SID = SID;
+    public void setStudentID(int student_id) {
+        this.student_id = student_id;
     }
 
-    void setEID(int EID) {
-        this.EID = EID;
+    public void setID(int id) {
+        this.id = id;
     }
 
-    void setYear(String year) {
+    public void setYear(String year) {
         this.year = year;
     }
 
-    void setSemester(String semester) {
+    public void setSemester(String semester) {
         this.semester = semester;
     }
 
-    void setGrade(char grade) {
+    public void setGrade(char grade) {
         this.grade = grade;
     }
 
@@ -46,16 +46,16 @@ public class Enrollment implements Comparable<Enrollment> {
         return this.semester;
     }
 
-    public int getSID() {
-        return this.SID;
+    public int getStudentID() {
+        return this.student_id;
     }
 
-    public int getCID() {
-        return this.CID;
+    public int getCourseID() {
+        return this.course_id;
     }
 
-    public int getEID() {
-        return this.EID;
+    public int getID() {
+        return this.id;
     }
 
     public char getGrade() {

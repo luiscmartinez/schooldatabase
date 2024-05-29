@@ -1,69 +1,89 @@
 package schooldatabase;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.sql.Statement;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Scanner;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import schooldatabase.database.DatabaseConnection;
 import schooldatabase.model.Enrollment;
 import schooldatabase.model.GenericList;
 
 public class EnrollmentFileManager {
-    String filename;
-    GenericList<Enrollment> enrollments = new GenericList<Enrollment>();// arrayList<Enrollment>
+    GenericList<Enrollment> enrollments = new GenericList<Enrollment>();
 
-    // Constructure
-    EnrollmentFileManager(String filename) {
-        try {
-            this.filename = filename;
-            File file = new File(filename);
-            Scanner FileScanner = new Scanner(file); // Create File scanner
-            // Read File line by line
-            if (file.exists()) {
-                while (FileScanner.hasNext()) {
-                    String line = FileScanner.nextLine();// read next line
-                    String[] e = line.split(",");// Split line into a string array
-                    // Asign the element of array to variables
-                    int EID = Integer.parseInt(e[0]);
-                    int SID = Integer.parseInt(e[1]);
-                    int CID = Integer.parseInt(e[2]);
-                    String Year = e[3];
-                    String Semester = e[4];
-                    char Grade = e[5].charAt(0);
-                    // Create course object using variables
-                    Enrollment enrollment = new Enrollment(EID, SID, CID, Year, Semester, Grade);
-                    enrollments.add(enrollment);// Add course Object to array list
-                }
-                FileScanner.close();
+    public EnrollmentFileManager() throws EmptyFieldException, IOException {
+        String selectSql = "SELECT * FROM enrollments;";
+        try (Connection conn = DatabaseConnection.getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(selectSql);
+                ResultSet rs = pstmt.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                int student_id = rs.getInt("student_id");
+                int course_id = rs.getInt("course_id");
+                String year = rs.getString("year");
+                String semester = rs.getString("semester");
+                char grade = rs.getString("grade").charAt(0);
+                Enrollment enrollment = new Enrollment(id, student_id, course_id, year, semester, grade);
+                enrollments.add(enrollment);
             }
-        } catch (IOException ioe) {
-            System.out.println("Error" + ioe.getMessage());
+            rs.close();
+            pstmt.close();
+            DatabaseConnection.closeConnection();
+        } catch (SQLException e) {
+            System.out.println("Error occurred during the select enrollments operation.");
+            e.printStackTrace();
         }
     }
 
-    boolean addEnrollment(int EID, int CID, int SID, String year, String semester, char grade)
+    boolean addEnrollment(int course_id, int student_id, String year, String semester, char grade)
             throws IOException, EmptyFieldException {
         // If Enrollment does not exsist then add it to the arraylist and return true
         if (year.equals("") || semester == null || grade == ' ') {
             throw new EmptyFieldException("One or More Fields Are Empty");
         } else {
-            if (getEnrollment(EID) == null) {
-                Enrollment enroll = new Enrollment(EID, SID, CID, year, semester, grade);
-                enrollments.add(enroll);
-
-                // Append the new course object to the file
-                FileWriter fwriter = new FileWriter(filename, true);
-                PrintWriter outputFile = new PrintWriter(fwriter);
-                outputFile.println(EID + "," + SID + "," + CID + "," + year + ","
-                        + semester + "," + grade);
-                outputFile.close();
-
-                System.out.println("Enrollment Has Been Added");
+            String insertSQL = "INSERT INTO enrollments (course_id, student_id, year, semester, grade) VALUES (?, ?, ?, ?, ?);";
+            try (Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
+                pstmt.setInt(1, course_id);
+                pstmt.setInt(2, student_id);
+                pstmt.setString(3, year);
+                pstmt.setString(4, semester);
+                pstmt.setString(5, Character.toString(grade));
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Creating Enrollment failed, no rows affected");
+                }
+                // Get the last inserted id
+                // String selectSql = "SELECT LAST_INSERT_ID() as eid;";
+                // try (PreparedStatement pstmt2 = conn.prepareStatement(selectSql);
+                // ResultSet rs = pstmt2.executeQuery()) {
+                // rs.next();
+                // int eid = rs.getInt("eid");
+                // Enrollment enrollment = new Enrollment(eid, course_id, student_id, year,
+                // semester, grade);
+                // enrollments.add(enrollment);
+                // rs.close();
+                // pstmt2.close();
+                // }
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        Enrollment enrollment = new Enrollment(generatedKeys.getInt(1), course_id, student_id, year,
+                                semester, grade);
+                        enrollments.add(enrollment);
+                    } else {
+                        throw new SQLException("Creating Enrollment failed, no ID obtain");
+                    }
+                }
+                DatabaseConnection.closeConnection();
                 return true;
+            } catch (SQLException e) {
+                System.out.println("Error occurred during the insert operation.");
+                e.printStackTrace();
+                return false;
             }
-            System.out.println("Enrollment Already Exists");
-            return false;
         }
     }
 
@@ -72,7 +92,7 @@ public class EnrollmentFileManager {
         Enrollment current;
         for (int i = 0; i < enrollments.size(); i++) {
             current = enrollments.get(i);
-            int Eid = current.getEID();
+            int Eid = current.getID();
             if (Eid == eid) {
                 return current;
             }
@@ -80,34 +100,38 @@ public class EnrollmentFileManager {
         return null;
     }
 
-    boolean updateEnrollment(int eid, int sid, int cid, String year, String semester, char grade)
+    boolean updateEnrollment(int id, int student_id, int course_id, String year, String semester, char grade)
             throws IOException, EmptyFieldException {
         if (year.equals("") || semester == null || grade == ' ') {
             throw new EmptyFieldException("One or More Fields Are Empty");
         } else {
-            Enrollment current;
-            for (int i = 0; i < enrollments.size(); i++) {
-                current = enrollments.get(i);
-                int Eid = current.getEID();
-                if (Eid == eid) {
-                    Enrollment updatedEnrollment = new Enrollment(Eid, cid, sid, year, semester, grade);
-
-                    enrollments.add(updatedEnrollment, i);
-
-                    enrollments.delete(i + 1);
-                    break;
+            String updateSQL = "UPDATE enrollments SET student_id = ?, course_id = ?, year = ?, semester = ?, grade = ? WHERE id = ?;";
+            try (Connection conn = DatabaseConnection.getConnection();
+                    PreparedStatement pstmt = conn.prepareStatement(updateSQL)) {
+                pstmt.setInt(1, student_id);
+                pstmt.setInt(2, course_id);
+                pstmt.setString(3, year);
+                pstmt.setString(4, semester);
+                pstmt.setString(5, Character.toString(grade));
+                pstmt.setInt(6, id);
+                int affectedRows = pstmt.executeUpdate();
+                if (affectedRows == 0) {
+                    throw new SQLException("Updating Enrollment failed, no rows affected");
                 }
+                Enrollment enrollment = getEnrollment(id);
+                enrollment.setStudentID(student_id);
+                enrollment.setCourseID(course_id);
+                enrollment.setYear(year);
+                enrollment.setSemester(semester);
+                enrollment.setGrade(grade);
+
+                DatabaseConnection.closeConnection();
+                return true;
+            } catch (SQLException e) {
+                System.out.println("Error occurred during the update operation.");
+                e.printStackTrace();
+                return false;
             }
-            // Write the updated array list to the file
-            FileWriter fwriter = new FileWriter(filename);
-            PrintWriter outputFile = new PrintWriter(fwriter);
-            for (int i = 0; i < enrollments.size(); i++) {
-                current = enrollments.get(i);
-                outputFile.println(current.getEID() + "," + current.getSID() + "," + current.getCID() + ","
-                        + current.getYear() + "," + current.getSemester() + "," + current.getGrade());
-            }
-            outputFile.close();
-            return true;
         }
     }
 }

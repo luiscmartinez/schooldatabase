@@ -39,7 +39,7 @@ public class EditEnrollmentView {
                             enrollment = enrollmentFileManager.getEnrollment(enrollmentId);
                             if (enrollment != null) {
                                 EnrollmentFormGenerator enrollmentForm = new EnrollmentFormGenerator();
-                                enrollmentForm.prepopulateForm(enrollment.getSID(), enrollment.getCID(),
+                                enrollmentForm.prepopulateForm(enrollment.getStudentID(), enrollment.getCourseID(),
                                         enrollment.getYear(), enrollment.getSemester(), enrollment.getGrade());
 
                                 EnrollmentActionHandler actionHandler = new EnrollmentActionHandler(enrollmentForm,

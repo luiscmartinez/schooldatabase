@@ -37,7 +37,7 @@ public class ShowEnrollmentView {
                                     .getEnrollment(EnrollmentID);
                             if (enrollment != null) {
                                 EnrollmentFormGenerator enrollmentForm = new EnrollmentFormGenerator();
-                                enrollmentForm.prepopulateForm(enrollment.getSID(), enrollment.getCID(),
+                                enrollmentForm.prepopulateForm(enrollment.getStudentID(), enrollment.getCourseID(),
                                         enrollment.getYear(), enrollment.getSemester(), enrollment.getGrade());
                                 formPane.add(enrollmentForm.createFormPane("View Enrollment"), 0, 1);
                             } else {

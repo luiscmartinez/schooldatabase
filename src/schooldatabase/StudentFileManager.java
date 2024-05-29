@@ -81,40 +81,12 @@ public class StudentFileManager {
     }
 
     public Student getStudent(int id) throws EmptyFieldException, IOException {
-
         for (int i = 0; i < students.size(); i++) {
             Student current = students.get(i);
             int ID = current.getId();
             if (ID == id) {
                 return current;
             }
-        }
-
-        String selectSQL = "SELECT * FROM students WHERE id = ?";
-        try (Connection conn = DatabaseConnection.getConnection();
-                PreparedStatement pstmt = conn.prepareStatement(selectSQL)) {
-            pstmt.setInt(1, id);
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    String firstName = rs.getString("first_name");
-                    String lastName = rs.getString("last_name");
-                    String address = rs.getString("address");
-                    String city = rs.getString("city");
-                    String state = rs.getString("state");
-                    String zip = rs.getString("zipcode");
-                    rs.close();
-                    pstmt.close();
-                    Student student = new Student(id, firstName, lastName, address, city, state, zip);
-                    students.add(student);
-                    DatabaseConnection.closeConnection();
-                    return student;
-                } else {
-                    throw new EmptyFieldException("Not a Valid ID");
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println("Error occurred during the search operation.");
-            e.printStackTrace();
         }
         return null;
     }

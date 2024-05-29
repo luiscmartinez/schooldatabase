@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import schooldatabase.model.Enrollment;
 
 public class EnrollmentActionHandler {
     private final EnrollmentFormGenerator newEnrollmentForm;
@@ -41,8 +40,7 @@ public class EnrollmentActionHandler {
             }
 
             // Assuming all validations passed, proceed to add the enrollment
-            final int enrollmentID = enrollmentFileManager.enrollments.size() + 1;
-            enrollmentFileManager.addEnrollment(enrollmentID, courseId, studentId, year, semester, grade);
+            enrollmentFileManager.addEnrollment(courseId, studentId, year, semester, grade);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enrollment added", ButtonType.OK);
             alert.setHeaderText("Enrollment Added");
             newEnrollmentForm.clearForm();
@@ -54,6 +52,8 @@ public class EnrollmentActionHandler {
         } catch (EmptyFieldException efe) {
             // Handle missing student or course
             // Log the error or inform the user
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Foreign records not found", ButtonType.OK);
+            alert.showAndWait();
         }
         // Consider catching other exceptions if necessary
         catch (IOException e) {
@@ -82,7 +82,7 @@ public class EnrollmentActionHandler {
             }
 
             // Assuming all validations passed, proceed to add the enrollment
-            enrollmentFileManager.updateEnrollment(enrollmentId, courseId, studentId, year, semester, grade);
+            enrollmentFileManager.updateEnrollment(enrollmentId, studentId, courseId, year, semester, grade);
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enrollment added", ButtonType.OK);
             alert.setHeaderText("Enrollment Updated");
             alert.showAndWait();
