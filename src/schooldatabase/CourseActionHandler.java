@@ -36,6 +36,7 @@ public class CourseActionHandler {
                         + "\nCourse Description: " + courseDescription, ButtonType.OK);
                 alert.setHeaderText("Course Was Added");
                 alert.showAndWait();
+                courseForm.clearForm();
             } else {
                 System.out.println("Failed to add course!");
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Course Already Exists ", ButtonType.OK);
@@ -50,6 +51,5 @@ public class CourseActionHandler {
             Alert alert = new Alert(Alert.AlertType.ERROR, exc.getMessage(), ButtonType.OK);
             alert.showAndWait();
         }
-        courseForm.clearForm();
     }
 }
