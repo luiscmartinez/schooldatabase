@@ -114,11 +114,19 @@ public class MainView {
         });
         MenuFactory.addItemsToMenu(enrollmentMenu, Arrays.asList(addEnrollment, viewEnrollment, editEnrollment));
 
+        // Report Menu
+        Menu reportMenu = MenuFactory.createMenu("Report");
+        MenuItem courseReport = MenuFactory.createMenuItem("Course Report", () -> {
+            showGenerateReportView(root);
+        });
+        MenuFactory.addItemsToMenu(reportMenu, Arrays.asList(courseReport));
+
         menuBar.getMenus().add(studentMenu);
         menuBar.getMenus().add(courseMenu);
         menuBar.getMenus().add(enrollmentMenu);
         menuBar.getMenus().add(instructorMenu);
         menuBar.getMenus().add(departmentMenu);
+        menuBar.getMenus().add(reportMenu);
         root.setTop(menuBar);
     }
 
@@ -197,4 +205,11 @@ public class MainView {
         EditDepartmentView editDepartmentView = new EditDepartmentView(departmentFileManager);
         root.setCenter(editDepartmentView.getFormPane());
     }
+
+    private void showGenerateReportView(BorderPane root) {
+        GenerateReportView generateReportView = new GenerateReportView(enrollmentFileManager, studentFileManager,
+                courseFileManager, instructorFileManager, departmentFileManager);
+        root.setCenter(generateReportView.getFormPane());
+    }
+
 }

@@ -1,6 +1,7 @@
 package schooldatabase;
 
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,7 +27,7 @@ public class EnrollmentFileManager {
                 String year = rs.getString("year");
                 String semester = rs.getString("semester");
                 char grade = rs.getString("grade").charAt(0);
-                Enrollment enrollment = new Enrollment(id, student_id, course_id, year, semester, grade);
+                Enrollment enrollment = new Enrollment(id, course_id, student_id, year, semester, grade);
                 enrollments.add(enrollment);
             }
             rs.close();
@@ -133,5 +134,18 @@ public class EnrollmentFileManager {
                 return false;
             }
         }
+    }
+
+    ArrayList<Enrollment> getEnrollments(int course_id, String year, String semester) {
+        ArrayList<Enrollment> courseEnrollments = new ArrayList<Enrollment>();
+        for (int i = 0; i < enrollments.size(); i++) {
+            Enrollment current = enrollments.get(i);
+            if (current.getCourseID() == course_id && current.getYear().equals(year)
+                    && current.getSemester().equals(semester)) {
+                courseEnrollments.add(current);
+            }
+        }
+        return courseEnrollments;
+
     }
 }

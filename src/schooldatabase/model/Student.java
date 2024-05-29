@@ -82,6 +82,10 @@ public class Student implements Comparable<Student> {
         return this.id;
     }
 
+    public String getName() {
+        return this.firstName + " " + this.lastName;
+    }
+
     @Override
     public String toString() {
         return id + "," + firstName + "," + lastName + "," + address + "," + city + "," + state + "," + zip;
