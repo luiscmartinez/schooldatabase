@@ -2,9 +2,6 @@ package schooldatabase;
 
 import java.io.IOException;
 
-import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
-
 public class EnrollmentActionHandler {
     private final EnrollmentFormGenerator newEnrollmentForm;
     private final EnrollmentFileManager enrollmentFileManager;
@@ -20,46 +17,26 @@ public class EnrollmentActionHandler {
         this.courseFileManager = courseFileManager;
     }
 
-    public void handleAddEnrollment() {
+    public void handleAddEnrollment() throws EmptyFieldException, IOException {
         String year = newEnrollmentForm.getYearField().getText();
         String semester = newEnrollmentForm.getSemesterComboBox();
         char grade = newEnrollmentForm.getGradeComboBox();
         // need to check if student and course id are valid
-        try {
-            int courseId = Integer.parseInt(newEnrollmentForm.getCourseIdField().getText());
-            int studentId = Integer.parseInt(newEnrollmentForm.getStudentIdField().getText());
+        int courseId = Integer.parseInt(newEnrollmentForm.getCourseIdField().getText());
+        int studentId = Integer.parseInt(newEnrollmentForm.getStudentIdField().getText());
 
-            // Validate student ID
-            if (studentFileManager.getStudent(studentId) == null) {
-                throw new EmptyFieldException("Student ID does not exist");
-            }
-
-            // Validate course ID without re-parsing
-            if (courseFileManager.getCourse(courseId) == null) {
-                throw new EmptyFieldException("Course ID does not exist");
-            }
-
-            // Assuming all validations passed, proceed to add the enrollment
-            enrollmentFileManager.addEnrollment(courseId, studentId, year, semester, grade);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Enrollment added", ButtonType.OK);
-            alert.setHeaderText("Enrollment Added");
-            newEnrollmentForm.clearForm();
-            alert.showAndWait();
-
-        } catch (NumberFormatException e) {
-            // Handle parsing errors for courseId and studentId
-            // Log the error or inform the user
-        } catch (EmptyFieldException efe) {
-            // Handle missing student or course
-            // Log the error or inform the user
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Foreign records not found", ButtonType.OK);
-            alert.showAndWait();
+        // Validate student ID
+        if (studentFileManager.getStudent(studentId) == null) {
+            throw new EmptyFieldException("Student ID does not exist");
         }
-        // Consider catching other exceptions if necessary
-        catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+
+        // Validate course ID without re-parsing
+        if (courseFileManager.getCourse(courseId) == null) {
+            throw new EmptyFieldException("Course ID does not exist");
         }
+
+        // Assuming all validations passed, proceed to add the enrollment
+        enrollmentFileManager.addEnrollment(courseId, studentId, year, semester, grade);
     }
 
     public void handleUpdateEnrollment(int enrollmentId) throws EmptyFieldException, IOException {

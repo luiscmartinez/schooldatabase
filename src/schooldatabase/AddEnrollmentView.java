@@ -1,5 +1,7 @@
 package schooldatabase;
 
+import java.io.IOException;
+
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.GridPane;
@@ -26,7 +28,28 @@ public class AddEnrollmentView {
         EnrollmentActionHandler actionHandler = new EnrollmentActionHandler(newEnrollmentForm, enrollmentFileManager,
                 studentFileManager, courseFileManager);
 
-        newEnrollmentForm.configureActionButton("submit enrollment", event -> actionHandler.handleAddEnrollment());
+        newEnrollmentForm.configureActionButton("submit enrollment", event -> {
+            if (newEnrollmentForm.getStudentIdField().getText().isEmpty()
+                    || newEnrollmentForm.getCourseIdField().getText().isEmpty()
+                    || newEnrollmentForm.getYearField().getText().isEmpty()
+                    || newEnrollmentForm.getSemesterComboBox().isEmpty()
+                    || newEnrollmentForm.getGradeComboBox() == ' ') {
+                Alert alert = new Alert(Alert.AlertType.ERROR, "All fields must be filled out", ButtonType.OK);
+                alert.showAndWait();
+                return;
+            }
+            try {
+                actionHandler.handleAddEnrollment();
+                Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                        "Enrollment updated successfully", ButtonType.OK);
+                alert.showAndWait();
+                newEnrollmentForm.clearForm();
+            } catch (EmptyFieldException | IOException e) {
+                Alert alert = new Alert(Alert.AlertType.ERROR, e.getMessage(),
+                        ButtonType.OK);
+                alert.showAndWait();
+            }
+        });
 
         newEnrollmentForm.configureStudentSearchButton(event -> {
             int studentId = Integer.parseInt(newEnrollmentForm.getStudentIdField().getText());

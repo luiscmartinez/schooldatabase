@@ -107,10 +107,14 @@ public class EnrollmentFormGenerator {
     }
 
     public char getGradeComboBox() {
+        if (gradeComboBox.getValue() == null) // Check if the gradeComboBox has a value selected
+            return ' '; // Return a space character (invalid grade
         return gradeComboBox.getValue().charValue();
     }
 
     public String getSemesterComboBox() {
+        if (semesterComboBox.getValue() == null) // Check if the semesterComboBox has a value selected
+            return ""; // Return an empty string (invalid semester
         return semesterComboBox.getValue();
     }
 
