@@ -99,7 +99,11 @@ public class MainView {
             showEditDepartmentView(root);
         });
 
-        MenuFactory.addItemsToMenu(departmentMenu, Arrays.asList(addDepartment, editDepartment));
+        MenuItem viewDepartment = MenuFactory.createMenuItem("View Department", () -> {
+            ShowDepartmentView(root);
+        });
+
+        MenuFactory.addItemsToMenu(departmentMenu, Arrays.asList(addDepartment, editDepartment, viewDepartment));
 
         MenuFactory.addItemsToMenu(instructorMenu, Arrays.asList(addInstructor, editInstructor, viewInstructor));
 
@@ -219,5 +223,10 @@ public class MainView {
     private void ShowInstructorView(BorderPane root) {
         ShowInstructorView showInstructorView = new ShowInstructorView(instructorFileManager, departmentFileManager);
         root.setCenter(showInstructorView.getFormPane());
+    }
+
+    private void ShowDepartmentView(BorderPane root) {
+        ShowDepartmentView showDepartmentView = new ShowDepartmentView(departmentFileManager);
+        root.setCenter(showDepartmentView.getFormPane());
     }
 }
